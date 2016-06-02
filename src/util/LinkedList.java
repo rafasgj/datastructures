@@ -6,6 +6,10 @@ import interfaces.BidirectionalIterator;
 import interfaces.Iterator;
 import interfaces.Sortable;
 
+/**
+ * A Double Linked List implementation, which can be iterated with a
+ * bidirectional iterator, and have its elements sorted.
+ */
 public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 
 	class Node {
@@ -90,24 +94,40 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 
 		@Override
 		public void remove() {
-			if (current == null)
-				current = tail;
-			Node novo = current.next;
-			if (current.next == null) {
-				tail = current.previous;
-				novo = current.previous;
+			if (current == head)
+				return;
+			if (tail == head || current == null) {
+				Node prev = tail.previous;
+				tail.remove();
+				if (tail == head)
+					head = prev;
+				tail = prev;
+				return;
 			}
-			if (current.previous == null)
+			Node next = current;
+			current = current.previous;
+			if (current == head)
 				head = current.next;
 			current.remove();
-			current = novo;
+			current = next;
 		}
-		
 	}
 	
 	private Node head;
 	private Node tail;
 	
+	/**
+	 * Check if the container is empty.
+	 * @return True if there are no elements stored, false otherwise.
+	 */
+	public boolean isEmpty() {
+		return head == null;
+	}
+	
+	/**
+	 * Add a new element to the end of the structure.
+	 * @param data The element to be added.
+	 */
 	public void append(T data) {
 		Node novo = new Node(data);
 		if (tail == null) {
@@ -119,6 +139,9 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 		tail = novo;
 	}
 	
+	/**
+	 * Returns a bidirectional iterator to the LinkedList.
+	 */
 	@Override
 	public Iterator<T> iterator() {
 		return new ListaIterator(this);
