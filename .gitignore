@@ -1,0 +1,9 @@
+# temporary files
+*.swp
+
+# OS Specific Files
+.DS_Store
+
+# Eclipse output directory
+/bin
+
