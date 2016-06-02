@@ -2,14 +2,16 @@ package test;
 
 import java.util.Comparator;
 
-import interfaces.Iterator;
+import interfaces.BidirectionalIterator;
 import util.LinkedList;
 
 public class TestLinkedList {
 	public static void main(String...strings) {
 		LinkedList<Integer> lista = new LinkedList<>();
+		BidirectionalIterator<Integer> iter;
+
 		lista.append(10);
-		Iterator<Integer> iter = lista.iterator();
+		iter = (BidirectionalIterator<Integer>)lista.iterator();
 		iter.next();
 		iter.remove();
 		if (lista.isEmpty())
@@ -18,9 +20,12 @@ public class TestLinkedList {
 			System.out.println("Lista DEVERIA estar vazia.");
 			
 		lista.append(4);
-		lista.append(2);
-		lista.append(3);
-		lista.append(1);
+		iter = (BidirectionalIterator<Integer>)lista.iterator();
+		iter.next();
+		iter.append(2);
+		iter.next();
+		iter.insert(3);
+		iter.append(1);
 		for (Integer n : lista)
 			System.out.print(n+" ");
 		System.out.println();
@@ -35,7 +40,7 @@ public class TestLinkedList {
 			System.out.print(n+" ");
 		System.out.println();
 
-		iter = lista.iterator();
+		iter = (BidirectionalIterator<Integer>)lista.iterator();
 		iter.next();
 		iter.next();
 		iter.next();

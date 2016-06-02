@@ -76,20 +76,32 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 
 		@Override
 		public void insert(T data) {
+			if (current == head)
+				return;
 			Node novo = new Node(data);
-			if (current.previous == null)
+			Node old, prev;
+			if (current == null) {
+				old = tail;
+				prev = tail.previous;
+			} else {
+				old = current.previous;
+				prev = old.previous;
+			}
+			novo.insert(prev, old);
+			if (prev == null)
 				head = novo;
-			novo.insert(current.previous, current);
 		}
 
 		@Override
 		public void append(T data) {
 			Node novo = new Node(data);
-			if (current == null)
+			if (current == null) {
 				current = tail;
+			}
 			if (current.next == null)
 				tail = novo;
 			novo.insert(current, current.next);
+			current = novo;
 		}
 
 		@Override
