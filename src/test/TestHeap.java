@@ -20,5 +20,12 @@ public class TestHeap {
 		while (!heap.isEmpty())
 			System.out.println(heap.pop()+" ");
 		System.out.println();
+		
+		System.out.println(new String(new char[20]).replace("\0", "-"));
+		Integer[] array = {14,8,7,2,3,16,15,10,1,9,12,6,13,4,5,11};
+		heap = BinaryHeap.heapify(array);
+		while (!heap.isEmpty())
+			System.out.println(heap.pop()+" ");
+		System.out.println();
 	}
 }

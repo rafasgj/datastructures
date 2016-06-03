@@ -9,6 +9,18 @@ public class BinaryHeap<T> {
 	private Comparator<T> cmp;
 	
 	/**
+	 * Store the number of operations on the last push
+	 */
+	public int pushOperations;
+	/**
+	 * Store the number of operations on the last pop
+	 */
+	public int popOperations;
+	/**
+	 * Store the number of operations on the last heapify
+	 */
+	public int heapifyOperations;
+	/**
 	 * Creates a new heap, given the comparator to use.
 	 */
 	@SuppressWarnings("unchecked")
@@ -48,6 +60,7 @@ public class BinaryHeap<T> {
 	 */
 	public static <T> BinaryHeap<T> heapify(T[] data, Comparator<T> cmp) {
 		BinaryHeap<T> heap = new BinaryHeap<>();
+		heap.heapifyOperations = 0;
 		heap.data = data;
 		heap.count = data.length;
 		heap.cmp = cmp;
@@ -57,13 +70,14 @@ public class BinaryHeap<T> {
 			int index = sz;
 			while (index > 0) {
 				int parent = (index-1) / 2;
-				if (heap.cmp.compare(heap.data[parent],heap.data[index]) < 0) {
+				heap.heapifyOperations++;
+				if (heap.cmp.compare(heap.data[index],heap.data[parent]) < 0) {
+					heap.heapifyOperations++;
 					T t = heap.data[parent];
 					heap.data[parent]= heap.data[index];
 					heap.data[index] = t;
-					index = parent;
-				} else
-					break;
+				}
+				index = parent;
 			}
 			sz++;
 		}
@@ -91,13 +105,16 @@ public class BinaryHeap<T> {
 	 * @param elem The element to be added to the heap.
 	 */
 	public void push(T elem) {
+		pushOperations = 0;
 		ensureEnoughSpace();
 		data[count] = elem;
 		int e = count;
 		count++;
 		while (e > 0) {
 			int r = (e-1)/2;
+			pushOperations++;
 			if (cmp.compare(data[e], data[r]) < 0) {
+				pushOperations++;
 				T t = data[e]; data[e] = data[r]; data[r] = t;
 			}
 			e = r;
@@ -119,6 +136,7 @@ public class BinaryHeap<T> {
 	 * @return The top element of the heap, or null, if the heap is empty.
 	 */
 	public T pop() {
+		popOperations = 0;
 		if (count == 0)
 			return null;
 		int r = 0;
@@ -131,12 +149,19 @@ public class BinaryHeap<T> {
 			int d = (r+1)*2;
 			if (e >= count) break;
 			if (d >= count) d = e;
+			popOperations++;
 			int s = (cmp.compare(data[e], data[d]) < 0) ? e : d;
+			popOperations++;
 			if (cmp.compare(data[r], data[s]) > 0) {
+				popOperations++;
 				T t = data[r]; data[r] = data[s]; data[s] = t;
 			}
 			r = s;
 		}
 		return res;
+	}
+
+	public int size() {
+		return count;
 	}
 }
