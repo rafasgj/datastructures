@@ -7,6 +7,11 @@ import java.util.Comparator;
  */
 public class Partition {
 	/**
+	 * Number of operations executed in the last 'partition'.
+	 */
+	public static int partitionOperations = 0;
+
+	/**
 	 * Given a pivot, partitions data in less than the pivot and greater
 	 * than the pivot. The data type used must be able to compare against
 	 * itself. If there's a value that is equal to the given pivot, if the
@@ -40,9 +45,30 @@ public class Partition {
 	 * @return The index where the list was partitioned.
 	 */
 	public static <T> int partition(T[] values, T pivot, Comparator<T> cmp) {
-		int s = 0;
-		int e = values.length - 1;
+		return partition(values, 0, values.length-1, pivot, cmp);
+	}
+
+	/**
+	 * Given a pivot, partitions a portion of the given data, starting at
+	 * index 's' end ending at index 'e' (both included), with respect to
+	 * the comparator given.
+	 * If there's a value that is equal to the given pivot, if the
+	 * whole data is sorted, using the same comparator, that value would
+	 * already be on its final position.
+	 * Returns the index where the list was partitioned.
+	 * @param values The data set.
+	 * @param s The initial index of the data.
+	 * @param e The final index of the data.
+	 * @param pivot The value used as comparator.
+	 * @param cmp The comparator to be used.
+	 * @return The index where the list was partitioned.
+	 */
+	public static <T>
+	int partition(T[] values, int s, int e, T pivot, Comparator<T> cmp)
+	{
+		partitionOperations = 0;
 		while (s < e) {
+			partitionOperations++;
 			if (cmp.compare(values[s],pivot) < 0)
 				s++;
 			else if (cmp.compare(values[e],pivot) > 0)
