@@ -2,6 +2,8 @@ package algorithms;
 
 import java.util.Comparator;
 
+import util.BinaryHeap;
+
 public class Sorting {
 
 	/**
@@ -151,4 +153,40 @@ public class Sorting {
 			ops += do_quick_sort(array, n+1, e, cmp);
 		return ops;
 	}
+	
+
+	/**
+	 * Sort the given data using heap sort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T extends Comparable<T>> int heapSort(T[] array) {
+		return heapSort(array, new Comparator<T>() {
+				@Override
+				public int compare(T o1, T o2) {
+					return o1.compareTo(o2);
+				}
+			});
+	}
+
+	/**
+	 * Sort the given data using heap sort and the given comparator. The
+	 * comparator 
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T> int heapSort(T[] array, Comparator<T> cmp) {
+		int ops = 0;
+		cmp = cmp.reversed(); // for a max heap, reverse the comparator.
+		BinaryHeap<T> heap = BinaryHeap.heapify(array, cmp);
+		ops = heap.heapifyOperations;
+		while (!heap.isEmpty()) {
+			array[heap.size()-1] = heap.pop();
+			ops += heap.popOperations;
+		}
+		return ops;
+	}
+
+
 }

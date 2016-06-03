@@ -74,6 +74,22 @@ public class TestSorting {
 		System.out.println(Sorting.quickSort(array));
 		printArray(array);
 		System.out.println(new String(new char[20]).replace("\0", "-"));
+		
+		// Heap sort.
+		System.out.println("Heap Sort");
+		System.out.print("Sorting ordered: "); System.out.flush();
+		array = ordered.clone();
+		System.out.println(Sorting.heapSort(array));
+		printArray(array);
+		System.out.print("Sorting reversed: "); System.out.flush();
+		array = reversed.clone();
+		System.out.println(Sorting.heapSort(array));
+		printArray(array);
+		System.out.print("Sorting random: "); System.out.flush();
+		array = random.clone();
+		System.out.println(Sorting.heapSort(array));
+		printArray(array);
+		System.out.println(new String(new char[20]).replace("\0", "-"));
 	}
 
 	private static <T> void printArray(T[] array) {
