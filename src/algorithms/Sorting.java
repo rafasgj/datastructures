@@ -190,6 +190,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T> int mergeSort(T[] array, Comparator<T> cmp) {
+		boolean swap = false;
 		int ops = 0;
 		int length = array.length;
 		@SuppressWarnings("unchecked")
@@ -211,10 +212,8 @@ public class Sorting {
 					}
 				}
 			}
-			T[] x = temp;
-			temp = array;
-			array = x;
-			//System.arraycopy(temp, 0, data, 0, temp.length);
+			ops += length;
+			System.arraycopy(temp, 0, array, 0, length);
 		}
 		return ops;
 	}
