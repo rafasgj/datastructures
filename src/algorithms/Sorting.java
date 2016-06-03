@@ -6,11 +6,20 @@ import util.BinaryHeap;
 
 public class Sorting {
 
-	private static <T extends Comparable<T>> Comparator<T> less() {
+	public static <T extends Comparable<T>> Comparator<T> less() {
 		return new Comparator<T>() {
 			@Override
 			public int compare(T o1, T o2) {
 				return o1.compareTo(o2);
+			}
+		};
+	}
+
+	public static <T extends Comparable<T>> Comparator<T> greater() {
+		return new Comparator<T>() {
+			@Override
+			public int compare(T o1, T o2) {
+				return o2.compareTo(o1);
 			}
 		};
 	}
@@ -161,17 +170,15 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T> int heapSort(T[] array, Comparator<T> cmp) {
-		int ops = 0;
 		cmp = cmp.reversed(); // for a max heap, reverse the comparator.
 		BinaryHeap<T> heap = BinaryHeap.heapify(array, cmp);
-		ops = heap.heapifyOperations;
+		int ops = heap.heapifyOperations;
 		while (!heap.isEmpty()) {
 			array[heap.size()-1] = heap.pop();
 			ops += heap.popOperations;
 		}
 		return ops;
 	}
-
 
 	/**
 	 * Sort the given data using heap sort.
@@ -190,7 +197,6 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T> int mergeSort(T[] array, Comparator<T> cmp) {
-		boolean swap = false;
 		int ops = 0;
 		int length = array.length;
 		@SuppressWarnings("unchecked")
@@ -216,5 +222,49 @@ public class Sorting {
 			System.arraycopy(temp, 0, array, 0, length);
 		}
 		return ops;
+	}
+	/**
+	 * Sort the given data using introsort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T extends Comparable<T>> int introSort(T[] array) {
+		return introSort(array, less());
+	}
+
+	/**
+	 * Sort the given data using heap sort and the given comparator. The
+	 * comparator 
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T> int introSort(T[] array, Comparator<T> cmp) {
+		int depth = (int)(2 * Math.log(array.length)/Math.log(2));
+		return do_introsort(array, 0, array.length-1, depth, cmp);
+	}
+
+	private static <T>
+	int do_introsort(T[] array, int s, int e, int depth, Comparator<T> cmp)
+	{
+		int ops = 0;
+		int sz = 1+e-s;
+		if (sz <= 1) return 0;
+		if (depth == 0) {
+			@SuppressWarnings("unchecked")
+			T[] temp = (T[])new Object[sz];
+			System.arraycopy(array, s, temp, 0, sz);
+			ops = heapSort(temp, cmp);
+			System.arraycopy(temp, 0, array, s, sz);
+			return ops;
+		} else {
+			int med = (s + e)/2;
+			T pivot=Partition.median_of_three(array[s],array[med],array[e],cmp);
+			int n = Partition.partition(array, s, e, pivot, cmp);
+			ops = Partition.partitionOperations;
+			ops += do_introsort(array, s, n-1, depth-1, cmp);
+			ops += do_introsort(array, n+1, e, depth-1, cmp);
+			return ops;
+		}
 	}
 }
