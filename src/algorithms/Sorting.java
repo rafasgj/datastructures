@@ -6,18 +6,22 @@ import util.BinaryHeap;
 
 public class Sorting {
 
+	private static <T extends Comparable<T>> Comparator<T> less() {
+		return new Comparator<T>() {
+			@Override
+			public int compare(T o1, T o2) {
+				return o1.compareTo(o2);
+			}
+		};
+	}
+	
 	/**
 	 * Sort the given data using insertion sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int insertionSort(T[] array) {
-		return insertionSort(array, new Comparator<T>() {
-				@Override
-				public int compare(T o1, T o2) {
-					return o1.compareTo(o2);
-				}
-			});
+		return insertionSort(array, less());
 	}
 
 	/**
@@ -46,12 +50,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int selectionSort(T[] array) {
-		return selectionSort(array, new Comparator<T>() {
-				@Override
-				public int compare(T o1, T o2) {
-					return o1.compareTo(o2);
-				}
-			});
+		return selectionSort(array, less());
 	}
 
 	/**
@@ -84,12 +83,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int bubbleSort(T[] array) {
-		return bubbleSort(array, new Comparator<T>() {
-				@Override
-				public int compare(T o1, T o2) {
-					return o1.compareTo(o2);
-				}
-			});
+		return bubbleSort(array, less());
 	}
 
 	/**
@@ -121,12 +115,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int quickSort(T[] array) {
-		return quickSort(array, new Comparator<T>() {
-				@Override
-				public int compare(T o1, T o2) {
-					return o1.compareTo(o2);
-				}
-			});
+		return quickSort(array, less());
 	}
 
 	/**
@@ -161,12 +150,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int heapSort(T[] array) {
-		return heapSort(array, new Comparator<T>() {
-				@Override
-				public int compare(T o1, T o2) {
-					return o1.compareTo(o2);
-				}
-			});
+		return heapSort(array, less());
 	}
 
 	/**
@@ -189,4 +173,49 @@ public class Sorting {
 	}
 
 
+	/**
+	 * Sort the given data using heap sort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T extends Comparable<T>> int mergeSort(T[] array) {
+		return mergeSort(array, less());
+	}
+
+	/**
+	 * Sort the given data using heap sort and the given comparator. The
+	 * comparator 
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T> int mergeSort(T[] array, Comparator<T> cmp) {
+		int ops = 0;
+		int length = array.length;
+		@SuppressWarnings("unchecked")
+		T[] temp = (T[]) new Object[length];
+		for (int sz = 1; sz < length; sz *= 2) {
+			for (int i = 0; i < length; i += 2*sz) {
+				int iLeft = i;
+				int iRight = Math.min(i + sz, array.length);
+				int lim = iRight;
+				int iEnd = Math.min(i + 2*sz, array.length);
+				for (int j = iLeft; j < iEnd; j++) {
+					ops++;
+					if (iLeft < lim && (iRight >= iEnd ||
+						cmp.compare(array[iLeft],array[iRight])<0))
+					{
+						temp[j] = array[iLeft++];
+					} else {
+						temp[j] = array[iRight++];
+					}
+				}
+			}
+			T[] x = temp;
+			temp = array;
+			array = x;
+			//System.arraycopy(temp, 0, data, 0, temp.length);
+		}
+		return ops;
+	}
 }
