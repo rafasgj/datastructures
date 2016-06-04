@@ -136,7 +136,7 @@ public class Partition {
 		while (min != max) {
 			int med = (min+max)/2;
 			pivot=median_of_three(values[min],values[med],values[max],cmp);
-			int index = partition(values, pivot, cmp);
+			int index = partition(values, min, max, pivot, cmp);
 			if (index == n)
 				return;
 			if (index > n)
