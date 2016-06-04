@@ -3,34 +3,17 @@ package algorithms;
 import java.util.Comparator;
 
 import util.BinaryHeap;
+import util.FunctionObjects;
 
 public class Sorting {
 
-	public static <T extends Comparable<T>> Comparator<T> less() {
-		return new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				return o1.compareTo(o2);
-			}
-		};
-	}
-
-	public static <T extends Comparable<T>> Comparator<T> greater() {
-		return new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				return o2.compareTo(o1);
-			}
-		};
-	}
-	
 	/**
 	 * Sort the given data using insertion sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int insertionSort(T[] array) {
-		return insertionSort(array, less());
+		return insertionSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -59,7 +42,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int selectionSort(T[] array) {
-		return selectionSort(array, less());
+		return selectionSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -92,7 +75,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int bubbleSort(T[] array) {
-		return bubbleSort(array, less());
+		return bubbleSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -124,7 +107,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int quickSort(T[] array) {
-		return quickSort(array, less());
+		return quickSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -159,7 +142,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int heapSort(T[] array) {
-		return heapSort(array, less());
+		return heapSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -186,7 +169,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int mergeSort(T[] array) {
-		return mergeSort(array, less());
+		return mergeSort(array, FunctionObjects.less());
 	}
 
 	/**
@@ -229,7 +212,7 @@ public class Sorting {
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
 	public static <T extends Comparable<T>> int introSort(T[] array) {
-		return introSort(array, less());
+		return introSort(array, FunctionObjects.less());
 	}
 
 	/**
