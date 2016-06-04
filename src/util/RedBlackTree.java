@@ -1,3 +1,12 @@
+/*
+ * Data Structures and Algorithms.
+ * Copyright (C) 2016 Rafael Guterres Jeffman
+ *
+ * See the LICENSE file accompanying this source code, for
+ * licensing restrictions that might apply.
+ *
+ */
+
 package util;
 
 class RedBlackNode<T extends Comparable<T>> {
