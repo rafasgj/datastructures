@@ -2,6 +2,8 @@ package algorithms;
 
 import java.util.Comparator;
 
+import util.FunctionObjects;
+
 /**
  * Provides algorithms to partition a data set.
  */
@@ -25,12 +27,7 @@ public class Partition {
 	public static <T extends Comparable<T>>
 	int partition(T[] values, T pivot)
 	{
-		return partition(values, pivot, new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				return o1.compareTo(o2);
-			}
-		});
+		return partition(values, pivot, FunctionObjects.less());
 	}
 	
 	/**
@@ -91,13 +88,9 @@ public class Partition {
 	public static <T extends Comparable<T>>
 	void nth_element(T[] values, int n)
 	{
-		nth_element(values, n, new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				return o1.compareTo(o2);
-			}
-		});
+		nth_element(values, n, FunctionObjects.less());
 	}
+
 	/**
 	 * Partially sort the given data, so that the n<sup>th</sup> element is
 	 * in its final position, if the whole data was sorted, with the given
@@ -107,9 +100,39 @@ public class Partition {
 	 * @param cmp The comparator to be used.
 	 */
 	public static <T> void nth_element(T[] values, int n, Comparator<T> cmp) {
+		nth_element(values, 0, values.length-1, n, cmp);
+	}
+
+	
+	/**
+	 * Partially sort the given data, so that the n<sup>th</sup> element is
+	 * in its final position, if the whole data was sorted, with the given
+	 * comparator.
+	 * @param values The data set.
+	 * @param s The index of the first value.
+	 * @param e The index of the first value.
+	 * @param n The position of the element.
+	 */
+	public static <T extends Comparable<T>>
+	void nth_element(T[] values, int s, int e, int n) {
+		nth_element(values, s, e, n, FunctionObjects.less());
+	}
+	
+	/**
+	 * Partially sort the given data, so that the n<sup>th</sup> element is
+	 * in its final position, if the whole data was sorted, with the given
+	 * comparator.
+	 * @param values The data set.
+	 * @param s The index of the first value.
+	 * @param e The index of the first value.
+	 * @param n The position of the element.
+	 * @param cmp The comparator to be used.
+	 */
+	public static <T>
+	void nth_element(T[] values, int s, int e, int n, Comparator<T> cmp) {
 		T pivot;
-		int min = 0;
-		int max = values.length - 1;
+		int min = s;
+		int max = e;
 		while (min != max) {
 			int med = (min+max)/2;
 			pivot=median_of_three(values[min],values[med],values[max],cmp);
@@ -128,6 +151,18 @@ public class Partition {
 	 * @param v1 The first  value.
 	 * @param v2 The second value.
 	 * @param v3 The third value.
+	 * @return The value which is the median of the values given.
+	 */
+	public static <T extends Comparable<T>>
+	T median_of_three(T v1, T v2, T v3) {
+		return median_of_three(v1, v2, v3, FunctionObjects.less());
+	}
+	
+	/**
+	 * Computes the median value of three values.
+	 * @param v1 The first  value.
+	 * @param v2 The second value.
+	 * @param v3 The third value.
 	 * @param cmp The comparator to use.
 	 * @return The value which is the median of the values given.
 	 */
@@ -139,4 +174,5 @@ public class Partition {
 		if (b >= 0 && c <= 0) return v2;
 		return v3;
 	}
+
 }
