@@ -12,7 +12,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int insertionSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long insertionSort(T[] array)
+	{
 		return insertionSort(array, FunctionObjects.less());
 	}
 
@@ -22,7 +24,9 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int insertionSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long insertionSort(T[] array, Comparator<T> cmp)
+	{
 		int i,j,ops = 0;
 		for (i = 0; i < array.length-1; i++) {
 			for (j = i+1; j > 0; j--) {
@@ -41,7 +45,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int selectionSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long selectionSort(T[] array)
+	{
 		return selectionSort(array, FunctionObjects.less());
 	}
 
@@ -51,7 +57,9 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int selectionSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long selectionSort(T[] array, Comparator<T> cmp)
+	{
 		int i,j,ops = 0;
 		for (i = 0; i < array.length-1; i++) {
 			T min = array[i];
@@ -74,7 +82,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int bubbleSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long bubbleSort(T[] array)
+	{
 		return bubbleSort(array, FunctionObjects.less());
 	}
 
@@ -84,7 +94,9 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int bubbleSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long bubbleSort(T[] array, Comparator<T> cmp)
+	{
 		int i,j,ops = 0;
 		boolean swap = false;
 		for (i = 0; i < array.length-1; i++) {
@@ -106,7 +118,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int quickSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long quickSort(T[] array)
+	{
 		return quickSort(array, FunctionObjects.less());
 	}
 
@@ -116,14 +130,16 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int quickSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long quickSort(T[] array, Comparator<T> cmp)
+	{
 		return do_quick_sort(array, 0, array.length-1, cmp);
 	}
 
 	private static <T>
-	int do_quick_sort(T[] array, int s, int e, Comparator<T> cmp)
+	long do_quick_sort(T[] array, int s, int e, Comparator<T> cmp)
 	{
-		int ops = 0;
+		long ops = 0;
 		int med = (s + e)/2;
 		T pivot = Partition.median_of_three(array[s],array[med],array[e],cmp);
 		int n = Partition.partition(array, s, e, pivot, cmp);
@@ -141,7 +157,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int heapSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long heapSort(T[] array)
+	{
 		return heapSort(array, FunctionObjects.less());
 	}
 
@@ -152,10 +170,11 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int heapSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long heapSort(T[] array, Comparator<T> cmp) {
 		cmp = cmp.reversed(); // for a max heap, reverse the comparator.
 		BinaryHeap<T> heap = BinaryHeap.heapify(array, cmp);
-		int ops = heap.heapifyOperations;
+		long ops = heap.heapifyOperations;
 		while (!heap.isEmpty()) {
 			array[heap.size()-1] = heap.pop();
 			ops += heap.popOperations;
@@ -168,7 +187,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int mergeSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long mergeSort(T[] array)
+	{
 		return mergeSort(array, FunctionObjects.less());
 	}
 
@@ -179,8 +200,10 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int mergeSort(T[] array, Comparator<T> cmp) {
-		int ops = 0;
+	public static <T>
+	long mergeSort(T[] array, Comparator<T> cmp)
+	{
+		long ops = 0;
 		int length = array.length;
 		@SuppressWarnings("unchecked")
 		T[] temp = (T[]) new Object[length];
@@ -211,7 +234,9 @@ public class Sorting {
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T extends Comparable<T>> int introSort(T[] array) {
+	public static <T extends Comparable<T>>
+	long introSort(T[] array)
+	{
 		return introSort(array, FunctionObjects.less());
 	}
 
@@ -222,15 +247,17 @@ public class Sorting {
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps) performed.
 	 */
-	public static <T> int introSort(T[] array, Comparator<T> cmp) {
+	public static <T>
+	long introSort(T[] array, Comparator<T> cmp)
+	{
 		int depth = (int)(2 * Math.log(array.length)/Math.log(2));
 		return do_introsort(array, 0, array.length-1, depth, cmp);
 	}
 
 	private static <T>
-	int do_introsort(T[] array, int s, int e, int depth, Comparator<T> cmp)
+	long do_introsort(T[] array, int s, int e, int depth, Comparator<T> cmp)
 	{
-		int ops = 0;
+		long ops = 0;
 		int sz = 1+e-s;
 		if (sz <= 1) return 0;
 		if (depth == 0) {

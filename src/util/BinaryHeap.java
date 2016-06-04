@@ -11,15 +11,15 @@ public class BinaryHeap<T> {
 	/**
 	 * Store the number of operations on the last push
 	 */
-	public int pushOperations;
+	public long pushOperations;
 	/**
 	 * Store the number of operations on the last pop
 	 */
-	public int popOperations;
+	public long popOperations;
 	/**
 	 * Store the number of operations on the last heapify
 	 */
-	public int heapifyOperations;
+	public long heapifyOperations;
 	/**
 	 * Creates a new heap, given the comparator to use.
 	 */

@@ -11,7 +11,7 @@ public class Partition {
 	/**
 	 * Number of operations executed in the last 'partition'.
 	 */
-	public static int partitionOperations = 0;
+	public static long partitionOperations = 0;
 
 	/**
 	 * Given a pivot, partitions data in less than the pivot and greater
@@ -64,6 +64,23 @@ public class Partition {
 	int partition(T[] values, int s, int e, T pivot, Comparator<T> cmp)
 	{
 		partitionOperations = 0;
+		int i = s, j = e;
+		while (true) {
+			partitionOperations++;
+			while (i < e && cmp.compare(values[i],pivot) <= 0) {
+				partitionOperations++;
+				i++;
+			}
+			partitionOperations++;
+			while (j> s && cmp.compare(values[j],pivot) > 0) {
+				partitionOperations++;
+				j--;
+			}
+			if (i >= j) return j;
+			partitionOperations++;
+			T t = values[i]; values[i] = values[j]; values[j] = t;
+		}
+		/*
 		while (s < e) {
 			partitionOperations++;
 			if (cmp.compare(values[s],pivot) < 0)
@@ -71,12 +88,17 @@ public class Partition {
 			else if (cmp.compare(values[e],pivot) > 0)
 				e--;
 			else {
-				T t = values[s];
-				values[s] = values[e];
-				values[e] = t;	 
+				if (values[e] == pivot) e--;
+				//else if (values[e] == pivot) e--;
+				else {
+					T t = values[s];
+					values[s] = values[e];
+					values[e] = t;	 
+				}
 			}
 		}
 		return s;
+		*/
 	}
 
 	/**
