@@ -89,25 +89,6 @@ public class Partition {
 			partitionOperations++;
 			T t = values[i]; values[i] = values[j]; values[j] = t;
 		}
-		/*
-		while (s < e) {
-			partitionOperations++;
-			if (cmp.compare(values[s],pivot) < 0)
-				s++;
-			else if (cmp.compare(values[e],pivot) > 0)
-				e--;
-			else {
-				if (values[e] == pivot) e--;
-				//else if (values[e] == pivot) e--;
-				else {
-					T t = values[s];
-					values[s] = values[e];
-					values[e] = t;	 
-				}
-			}
-		}
-		return s;
-		*/
 	}
 
 	/**
