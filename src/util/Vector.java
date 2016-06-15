@@ -23,12 +23,16 @@ class VectorIterator<T> implements interfaces.Iterator<T> {
 
 	@Override
 	public void insert(T value) {
+		if (current < 0)
+			throw new IllegalStateException("Usage before next().");
 		container.insert(current, value);
 		current++;
 	}
 
 	@Override
 	public void remove() {
+		if (current < 0)
+			throw new IllegalStateException("Usage before next().");
 		container.remove(this.current);
 	}
 
@@ -42,7 +46,6 @@ class VectorIterator<T> implements interfaces.Iterator<T> {
 	public boolean hasNext() {
 		return current < container.size()-1;
 	}
-	
 }
 
 /**

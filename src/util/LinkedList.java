@@ -86,7 +86,7 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 		@Override
 		public void insert(T data) {
 			if (current == head)
-				return;
+				throw new IllegalStateException("Usage before next().");
 			Node novo = new Node(data);
 			Node old, prev;
 			if (current == null) {
@@ -103,6 +103,10 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 
 		@Override
 		public void append(T data) {
+			if (head == null) {
+				String error_msg = "Cannot use iterator on an empty list.";
+				throw new IllegalStateException(error_msg);
+			}
 			Node novo = new Node(data);
 			if (current == null) {
 				current = tail;
@@ -116,7 +120,7 @@ public class LinkedList<T> implements Iterable<T>, Sortable<T> {
 		@Override
 		public void remove() {
 			if (current == head)
-				return;
+				throw new IllegalStateException("Usage before next().");
 			if (tail == head || current == null) {
 				Node prev = tail.previous;
 				tail.remove();
