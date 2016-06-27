@@ -9,7 +9,28 @@
 
 package util;
 
-public class Hashtable<K, V> {
+public class Hashtable<K, V> implements java.lang.Iterable<K> {
+	
+	private class HashKeyIterator implements java.util.Iterator<K> {
+		int current = 0;
+		int index = 0;
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public K next() {
+			for (int i = index; i < table.length; i++)
+				if (table[i] != null) {
+					index = i;
+					current++;
+					return ((HashEntry)table[i]).key;
+				}
+			return null;
+		}
+		@Override
+		public boolean hasNext() {
+			return current < size();
+		}
+	}
 
 	private static <K> int[] generateHashes(K key, int hashCount) {
 		int[] hs = new int[hashCount];
@@ -180,5 +201,10 @@ public class Hashtable<K, V> {
 	 */
 	public int size() {
 		return elementCount;
+	}
+
+	@Override
+	public java.util.Iterator<K> iterator() {
+		return (java.util.Iterator<K>)(new HashKeyIterator());
 	}
 }
