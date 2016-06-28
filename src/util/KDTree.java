@@ -81,11 +81,11 @@ class KDNode {
 		Partition.nth_element(points, s, e, m, datacmp);
 		this.data = points[m];
 		if (m-s > 1)
-			left = new KDNode(points, s, m-1, d+1 % this.data.length());
+			left = new KDNode(points, s, m-1, (d+1) % this.data.length());
 		else if (m-s > 0)
 			left = new KDNode(points[s]);
 		if (e-m > 1)
-			right = new KDNode(points, m+1, e, d+1 % this.data.length());
+			right = new KDNode(points, m+1, e, (d+1) % this.data.length());
 		else if (m-s > 0)
 			right = new KDNode(points[e]);
 		
