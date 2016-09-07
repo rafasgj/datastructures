@@ -2,6 +2,8 @@ package util;
 
 import java.util.Locale;
 
+import util.LinkedList;
+
 class RadixNode {
 	private String data;
 	private LinkedList<RadixNode> children;

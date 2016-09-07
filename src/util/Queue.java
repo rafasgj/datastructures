@@ -11,6 +11,7 @@ package util;
 
 import java.util.NoSuchElementException;
 
+import util.LinkedList;
 import interfaces.Iterator;
 
 /**
