@@ -148,15 +148,21 @@ public class Sorting {
 	private static <T>
 	long do_quick_sort(T[] array, int s, int e, Comparator<T> cmp)
 	{
+		if (s >= e) return 0;
 		long ops = 0;
 		int med = (s + e)/2;
 		T pivot = Partition.median_of_three(array[s],array[med],array[e],cmp);
 		int n = Partition.partition(array, s, e, pivot, cmp);
 		ops += Partition.partitionOperations;
-		if (n > s+1)
-			ops += do_quick_sort(array, s, n-1, cmp);
-		if (n < e-1)
+		int a = n - s;
+		int b = e - n;
+		if (a < b) {
+			ops += do_quick_sort(array, s, n, cmp);
 			ops += do_quick_sort(array, n+1, e, cmp);
+		} else {
+			ops += do_quick_sort(array, n+1, e, cmp);
+			ops += do_quick_sort(array, s, n, cmp);
+		}
 		return ops;
 	}
 	
