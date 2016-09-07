@@ -73,22 +73,30 @@ public class Partition {
 	int partition(T[] values, int s, int e, T pivot, Comparator<T> cmp)
 	{
 		partitionOperations = 0;
-		int i = s, j = e;
+		int i = s-1, j = e+1;
 		while (true) {
-			partitionOperations++;
-			while (i < e && cmp.compare(values[i],pivot) <= 0) {
-				partitionOperations++;
+			int cmp_i = 0, cmp_j = 0;
+			do {
 				i++;
-			}
-			partitionOperations++;
-			while (j> s && cmp.compare(values[j],pivot) > 0) {
-				partitionOperations++;
+				cmp_i = compare(cmp, values[i], pivot);
+			} while (i < e && cmp_i < 0);
+			do {
 				j--;
-			}
+				cmp_j = compare(cmp, values[j], pivot);
+			} while (j> s && cmp_j > 0);
 			if (i >= j) return j;
-			partitionOperations++;
-			T t = values[i]; values[i] = values[j]; values[j] = t;
+			swap(values, i, j);
 		}
+	}
+	private static <T> int compare(Comparator<T> cmp, T a , T b) {
+		partitionOperations++;
+		return cmp.compare(a, b);
+	}
+	private static <T> void swap(T[] array, int i, int j) {
+		partitionOperations++;
+		T t = array[i];
+		array[i] = array[j];
+		array[j] = t;
 	}
 
 	/**
@@ -182,8 +190,8 @@ public class Partition {
 		int a = cmp.compare(v1, v2);
 		int b = cmp.compare(v1, v3);
 		int c = cmp.compare(v2, v3);
-		if (a <= 0 && b <= 0) return v1;
-		if (b >= 0 && c <= 0) return v2;
+		if ((a >= 0 && b <= 0) || (a <= 0 && b >=0)) return v1;
+		if ((a <= 0 && c <= 0) || (a >= 0 && c >=0)) return v2;
 		return v3;
 	}
 
