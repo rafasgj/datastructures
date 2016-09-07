@@ -46,6 +46,8 @@ public class TestSorting {
 		Sort[] fast = {
 				new Sort<Integer>("Quick",
 						(n)-> Sorting.quickSort((Integer[])n)),
+				new Sort<Integer>("Quick Iterative",
+						(n)-> Sorting.qsort((Integer[])n)),
 				new Sort<Integer>("Heap",
 						(n)-> Sorting.heapSort((Integer[])n)),
 				new Sort<Integer>("Intro",

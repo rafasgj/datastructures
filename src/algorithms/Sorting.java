@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 import util.BinaryHeap;
 import util.FunctionObjects;
+import util.Stack;
 
 public class Sorting {
 
@@ -122,6 +123,59 @@ public class Sorting {
 		return ops;
 	}
 
+	/**
+	 * Sort the given data using an iterative version of quick sort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T extends Comparable<T>>
+	long qsort(T[] array)
+	{
+		return qsort(array, FunctionObjects.less());
+	}
+
+	/**
+	 * Sort the given data using an iterative quick sort and the given
+	 * comparator.
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps) performed.
+	 */
+	public static <T>
+	long qsort(T[] array, Comparator<T> cmp)
+	{
+		class Pair {
+			int s, e;
+			public Pair(int s, int e) {
+				this.s = s;
+				this.e = e;
+			}
+		}
+		long ops = 0;
+		Stack<Pair> callStack = new Stack<>();
+		callStack.push(new Pair(0,array.length-1));
+		while (!callStack.isEmpty()) {
+			Pair p = callStack.pop();
+			int s = p.s, e = p.e;
+			if (s >= e) continue;
+			int med = (s + e)/2;
+			T pivot = Partition.median_of_three(array[s],array[med],array[e],cmp);
+			int n = Partition.partition(array, s, e, pivot, cmp);
+			ops += Partition.partitionOperations;
+			int a = n - s;
+			int b = e - n;
+			if (a < b) {
+				callStack.push(new Pair(s,n));
+				callStack.push(new Pair(n+1,e));
+			} else {
+				callStack.push(new Pair(n+1,e));
+				callStack.push(new Pair(s,n));
+			}
+		}
+		return ops;
+	}
+
+	
 	/**
 	 * Sort the given data using quick sort.
 	 * @param array The array to be sorted.
