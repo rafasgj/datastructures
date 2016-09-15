@@ -9,6 +9,8 @@
 
 package test;
 
+import java.util.Comparator;
+
 import algorithms.Sorting;
 
 public class TestSorting {
@@ -40,6 +42,7 @@ public class TestSorting {
 						(n)-> Sorting.bubbleSort((Integer[])n)),
 				new Sort<Integer>("Selection",
 						(n)-> Sorting.selectionSort((Integer[])n)),
+
 		};
 		
 		@SuppressWarnings("rawtypes")
@@ -117,7 +120,8 @@ public class TestSorting {
 		System.out.println(new String(new char[20]).replace("\0", "="));
 	}
 
-	private static <T> void testAlgorithmWithArray(String style, T[] array, Algorithm <T> algorithm, boolean print) {
+	private static <T extends Comparable<T>>
+	void testAlgorithmWithArray(String style, T[] array, Algorithm <T> algorithm, boolean print) {
 		long s, e;
 		System.out.println(new String(new char[20]).replace("\0", "-"));
 		System.out.println("Sorting " + style + ": ");
@@ -129,8 +133,23 @@ public class TestSorting {
 		System.out.println("Operations: " + algorithm.execute(clone));
 		e = System.currentTimeMillis();
 		System.out.println("Execution Time: " + ((e-s)/1000.0) + "s");
+		if (!validateArray(clone))
+			System.err.println("There was an error sorting this array.");
 		if (print)
 			printArray(clone);
+	}
+
+	private static <T extends Comparable<T>> boolean validateArray(T[] array) {
+		boolean ok = true;
+		Comparator<T> cmp = (a,b) -> a.compareTo(b);
+		T last = array[0];
+		for (int i = 1; i < array.length; i++) {
+			if (cmp.compare(last, array[i]) > 0) {
+				System.out.println(last + " - " + array[i]);
+				ok = false;
+			}
+		}
+		return ok;
 	}
 
 	private static <T> void printArray(T[] array) {
