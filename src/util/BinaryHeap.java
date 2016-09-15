@@ -136,7 +136,7 @@ public class BinaryHeap<T> {
 			pushOperations++;
 			if (cmp.compare(data[e], data[r]) < 0) {
 				pushOperations++;
-				T t = data[e]; data[e] = data[r]; data[r] = t;
+				Functions.swap(data, e, r);
 			}
 			e = r;
 		}

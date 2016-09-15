@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 import util.BinaryHeap;
 import util.FunctionObjects;
+import util.Functions;
 import util.Stack;
 
 public class Sorting {
@@ -43,7 +44,7 @@ public class Sorting {
 				ops++;
 				if (cmp.compare(array[j],array[j-1]) < 0) {
 					ops++;
-					T t = array[j]; array[j] = array[j-1]; array[j-1] = t;
+					Functions.swap(array, j, j-1);
 				} else break;
 			}
 		}
@@ -82,7 +83,7 @@ public class Sorting {
 				}
 			}
 			ops++;
-			T t = array[i]; array[i] = array[n]; array[n] = t;
+			Functions.swap(array, i, n);
 		}
 		return ops;
 	}
@@ -114,7 +115,7 @@ public class Sorting {
 				ops++;
 				if (cmp.compare(array[i],array[j]) > 0) {
 					ops++;
-					T t = array[i]; array[i] = array[j]; array[j] = t;
+					Functions.swap(array, i, j);
 					swap = true;
 				}
 			}
@@ -243,12 +244,11 @@ public class Sorting {
 	long heapSort(T[] array, Comparator<T> cmp) {
 		cmp = cmp.reversed(); // for a max heap, reverse the comparator.
 		BinaryHeap<T> heap = BinaryHeap.heapify(array, cmp);
-		long ops = heap.heapifyOperations;
+		heap.heapifyOperations = 0;
 		while (!heap.isEmpty()) {
 			array[heap.size()-1] = heap.pop();
-			ops += heap.popOperations;
 		}
-		return ops;
+		return heap.heapifyOperations;
 	}
 
 	/**
