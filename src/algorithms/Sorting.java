@@ -41,7 +41,8 @@ public class Sorting {
 	public static <T>
 	long insertionSort(T[] array, Comparator<T> cmp)
 	{
-		int i,j,ops = 0;
+		long ops = 0;
+		int i,j = 0;
 		for (i = 0; i < array.length-1; i++) {
 			for (j = i+1; j > 0; j--) {
 				ops++;
@@ -77,7 +78,8 @@ public class Sorting {
 	public static <T>
 	long selectionSort(T[] array, Comparator<T> cmp)
 	{
-		int i,j,ops = 0;
+		long ops = 0;
+		int i,j;
 		for (i = 0; i < array.length-1; i++) {
 			T min = array[i];
 			int n = i;
@@ -116,7 +118,8 @@ public class Sorting {
 	public static <T>
 	long bubbleSort(T[] array, Comparator<T> cmp)
 	{
-		int i,j,ops = 0;
+		long ops = 0;
+		int i,j = 0;
 		boolean swap = false;
 		for (i = 0; i < array.length-1; i++) {
 			for (j = i+1; j < array.length; j++) {
@@ -265,6 +268,61 @@ public class Sorting {
 	}
 
 	/**
+	 * Sort the given data using an inplace merge sort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T extends Comparable<T>>
+	long inplaceMergeSort(T[] array)
+	{
+		return mergeSort(array, FunctionObjects.less());
+	}
+	/**
+	 * Sort the given data using a recursive merge sort and the
+	 * given comparator. 
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T>
+	long inplaceMergeSort(T[] array, Comparator<T> cmp)
+	{
+		return do_SplitMerge(array, 0, array.length-1, cmp);
+	}
+
+	private static <T>
+	long do_SplitMerge(T[] data, int start, int end, Comparator<T> cmp) {
+		if (end - start < 1) {
+			return 0;
+		}
+		int m = start + ((end - start)/2);
+		long ops = do_SplitMerge(data, start, m, cmp);
+		ops += do_SplitMerge(data, m+1, end, cmp);
+		ops += do_inplaceMerge(data, start, m, end, cmp);
+		return ops;
+	}
+
+	private static <T>
+	long do_inplaceMerge(T[] data, int start, int m, int end, Comparator<T> cmp) {
+		int ops = 0;
+		for (int i = m+1; i <= end; i++) {
+			for (int j = i; j >= start; j--) {
+				ops++;
+				if (cmp.compare(data[j],data[j-1]) < 0) {
+					ops++;
+					Functions.swap(data, j, j-1);
+				} else {
+					break;
+				}
+			}
+		}
+		return ops;
+	}
+
+	
+	/**
 	 * Sort the given data using a recursive merge sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
@@ -286,7 +344,7 @@ public class Sorting {
 	public static <T>
 	long mergeSort(T[] array, Comparator<T> cmp)
 	{
-		return do_SplitMerge(array.clone(), array, 0, array.length-1, cmp);
+		return array.length + do_SplitMerge(array.clone(), array, 0, array.length-1, cmp);
 	}
 	
 	
@@ -342,30 +400,37 @@ public class Sorting {
 	public static <T>
 	long msort(T[] array, Comparator<T> cmp)
 	{
-		long ops = 0;
+		T[] b = array;
 		int length = array.length;
-		@SuppressWarnings("unchecked")
-		T[] temp = (T[]) new Object[length];
+		long ops = length;
+		T[] temp = array.clone();
+		boolean changed = false;
 		for (int sz = 1; sz < length; sz *= 2) {
 			for (int i = 0; i < length; i += 2*sz) {
 				int iLeft = i;
-				int iRight = Math.min(i + sz, array.length);
+				int iRight = Math.min(i + sz, b.length);
 				int lim = iRight;
-				int iEnd = Math.min(i + 2*sz, array.length);
+				int iEnd = Math.min(i + 2*sz, b.length);
 				for (int j = iLeft; j < iEnd; j++) {
-					ops++;
+					ops += 2;
 					if (iLeft < lim && (iRight >= iEnd ||
-						cmp.compare(array[iLeft],array[iRight]) < 0))
+						cmp.compare(b[iLeft],b[iRight]) < 0))
 					{
-						temp[j] = array[iLeft++];
+						temp[j] = b[iLeft++];
 					} else {
-						temp[j] = array[iRight++];
+						temp[j] = b[iRight++];
 					}
 				}
 			}
-			ops += length;
-			System.arraycopy(temp, 0, array, 0, length);
+			T[] x = temp;
+			temp = b;
+			b = x;
+			changed = !changed;
 		}
+		
+		ops += length;
+		for (int i = 0; i < length; i++)
+			array[i] = b[i];
 		return ops;
 	}
 	/**

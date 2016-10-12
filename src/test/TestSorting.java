@@ -28,9 +28,9 @@ public class TestSorting {
 		}
 	}
 	
-	private static Integer[] ordered = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-	private static Integer[] reversed = {16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
-	private static Integer[] random = {14,14,8,7,2,3,16,15,10,1,9,12,6,13,4,5,11,17,17,14};
+	private static Integer[] ordered = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+	private static Integer[] reversed = {21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
+	private static Integer[] random = {14,14,8,7,2,3,16,15,10,1,18,9,12,6,13,4,5,11,17,17,14};
 	
 	@SuppressWarnings("unchecked")
 	public static void main(String...args) {
@@ -58,6 +58,8 @@ public class TestSorting {
 						(n)-> Sorting.mergeSort((Integer[])n)),
 				new Sort<Integer>("Merge Iteractive",
 						(n)-> Sorting.msort((Integer[])n)),
+				new Sort<Integer>("Inplace Merge",
+						(n)-> Sorting.inplaceMergeSort((Integer[])n)),
 		};
 
 		// Small arrays to test correctness.
@@ -68,30 +70,35 @@ public class TestSorting {
 
 		// Large arrays to test speed.
 		random = startLargeTest("Large", 64);
-		for (Sort<Integer> p : simple)
+		System.out.println("Negative number of operations, means more than "+
+						   Long.MAX_VALUE + " operations.");
+		for (Sort<Integer> p : simple) {
 			testAlgorithmWithArray(
 					p.name,
 					random.clone(),
 					p.algorithm,
 					false
 			);
-		for (Sort<Integer> p : fast)
+		}
+		for (Sort<Integer> p : fast) {
 			testAlgorithmWithArray(
 					p.name,
 					random.clone(),
 					p.algorithm,
 					false
 			);
+		}
 		
 		// Really Large arrays to test usability of algorithms.
 		random = startLargeTest("Huge", 8*1024);
-		for (Sort<Integer> p : fast)
+		for (Sort<Integer> p : fast) {
 			testAlgorithmWithArray(
 					p.name,
 					random.clone(),
 					p.algorithm,
 					false
 			);
+		}
 	}
 
 	private static Integer[] startLargeTest(String name, int kElements) {
@@ -131,7 +138,7 @@ public class TestSorting {
 		e = System.currentTimeMillis();
 		System.out.println("Cloning Time: " + ((e-s)/1000.0) + "s");
 		s = System.currentTimeMillis();
-		System.out.println("Operations: " + algorithm.execute(clone));
+		System.out.println("Operations: " + String.format("%d", algorithm.execute(clone)));
 		e = System.currentTimeMillis();
 		System.out.println("Execution Time: " + ((e-s)/1000.0) + "s");
 		if (!validateArray(clone))
@@ -144,12 +151,16 @@ public class TestSorting {
 		boolean ok = true;
 		Comparator<T> cmp = (a,b) -> a.compareTo(b);
 		T last = array[0];
+		int errors = 0;
 		for (int i = 1; i < array.length; i++) {
 			if (cmp.compare(last, array[i]) > 0) {
+				errors++;
 				System.out.println(last + " - " + array[i]);
 				ok = false;
 			}
 		}
+		if (!ok)
+		System.err.println("Errors: " + errors);
 		return ok;
 	}
 
