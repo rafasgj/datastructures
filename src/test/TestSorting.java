@@ -42,7 +42,6 @@ public class TestSorting {
 						(n)-> Sorting.bubbleSort((Integer[])n)),
 				new Sort<Integer>("Selection",
 						(n)-> Sorting.selectionSort((Integer[])n)),
-
 		};
 		
 		@SuppressWarnings("rawtypes")
@@ -57,6 +56,8 @@ public class TestSorting {
 						(n)-> Sorting.introSort((Integer[])n)),
 				new Sort<Integer>("Merge",
 						(n)-> Sorting.mergeSort((Integer[])n)),
+				new Sort<Integer>("Merge Iteractive",
+						(n)-> Sorting.msort((Integer[])n)),
 		};
 
 		// Small arrays to test correctness.

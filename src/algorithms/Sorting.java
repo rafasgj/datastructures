@@ -21,7 +21,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using insertion sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long insertionSort(T[] array)
@@ -30,10 +31,12 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using insertion sort and the given comparator.
+	 * Sort the given data using insertion sort and the given
+	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long insertionSort(T[] array, Comparator<T> cmp)
@@ -54,7 +57,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using selection sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long selectionSort(T[] array)
@@ -63,10 +67,12 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using selection sort and the given comparator.
+	 * Sort the given data using selection sort and the given
+	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long selectionSort(T[] array, Comparator<T> cmp)
@@ -91,7 +97,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using bubble sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long bubbleSort(T[] array)
@@ -103,7 +110,8 @@ public class Sorting {
 	 * Sort the given data using bubble sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long bubbleSort(T[] array, Comparator<T> cmp)
@@ -127,7 +135,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using an iterative version of quick sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long qsort(T[] array)
@@ -140,7 +149,8 @@ public class Sorting {
 	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long qsort(T[] array, Comparator<T> cmp)
@@ -180,7 +190,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using quick sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long quickSort(T[] array)
@@ -192,7 +203,8 @@ public class Sorting {
 	 * Sort the given data using quick sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long quickSort(T[] array, Comparator<T> cmp)
@@ -225,7 +237,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using heap sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long heapSort(T[] array)
@@ -234,15 +247,15 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using heap sort and the given comparator. The
-	 * comparator 
+	 * Sort the given data using heap sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long heapSort(T[] array, Comparator<T> cmp) {
-		cmp = cmp.reversed(); // for a max heap, reverse the comparator.
+		cmp = cmp.reversed(); //for a max heap, reverse the comparator.
 		BinaryHeap<T> heap = BinaryHeap.heapify(array, cmp);
 		heap.heapifyOperations = 0;
 		while (!heap.isEmpty()) {
@@ -252,25 +265,82 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using heap sort.
+	 * Sort the given data using a recursive merge sort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long mergeSort(T[] array)
 	{
 		return mergeSort(array, FunctionObjects.less());
 	}
-
 	/**
-	 * Sort the given data using heap sort and the given comparator. The
-	 * comparator 
+	 * Sort the given data using a recursive merge sort and the
+	 * given comparator. 
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long mergeSort(T[] array, Comparator<T> cmp)
+	{
+		return do_SplitMerge(array.clone(), array, 0, array.length-1, cmp);
+	}
+	
+	
+	private static <T>
+	long do_SplitMerge(T[] b, T[] a, int start, int end, Comparator<T> cmp) {
+		if (end - start < 1) {
+			return 0;
+		}
+		int m = start + ((end - start)/2);
+		long ops = do_SplitMerge(a, b, start, m, cmp);
+		ops += do_SplitMerge(a, b, m+1, end, cmp);
+		ops += do_merge(b, a, start, m, end, cmp);
+		return ops;
+	}
+
+	private static <T>
+	long do_merge(T[] a, T[] b, int start, int m, int end, Comparator<T> cmp) {
+		int ops = 0;
+		int i = start, j = m+1;
+		for (int k = start; k <= end; k++) {
+			ops += 2;
+			if (i <= m && (j > end || cmp.compare(a[i],a[j]) <= 0)) {
+				b[k] = a[i];
+				i++;
+			} else {
+				b[k] = a[j];
+				j++;
+			}
+		}
+		return ops;
+	}
+
+	/**
+	 * Sort the given data using iterative merge sort.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T extends Comparable<T>>
+	long msort(T[] array)
+	{
+		return msort(array, FunctionObjects.less());
+	}
+
+	/**
+	 * Sort the given data using iterative merge sort and the
+	 * given comparator. 
+	 * @param array The array to be sorted.
+	 * @param cmp The comparator to use.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T>
+	long msort(T[] array, Comparator<T> cmp)
 	{
 		long ops = 0;
 		int length = array.length;
@@ -285,7 +355,7 @@ public class Sorting {
 				for (int j = iLeft; j < iEnd; j++) {
 					ops++;
 					if (iLeft < lim && (iRight >= iEnd ||
-						cmp.compare(array[iLeft],array[iRight])<0))
+						cmp.compare(array[iLeft],array[iRight]) < 0))
 					{
 						temp[j] = array[iLeft++];
 					} else {
@@ -301,7 +371,8 @@ public class Sorting {
 	/**
 	 * Sort the given data using introsort.
 	 * @param array The array to be sorted.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T extends Comparable<T>>
 	long introSort(T[] array)
@@ -310,11 +381,11 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using heap sort and the given comparator. The
-	 * comparator 
+	 * Sort the given data using heap sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
-	 * @return The number of operations (comparisons and swaps) performed.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
 	 */
 	public static <T>
 	long introSort(T[] array, Comparator<T> cmp)
