@@ -19,6 +19,7 @@ public class RobinHoodHash<K,V> {
 	private int numElementos = 0;
 	
 	private Object[] table = new Object[10];
+	private boolean rehashing = false;
 
 	public RobinHoodHash() {
 	}
@@ -46,14 +47,12 @@ public class RobinHoodHash<K,V> {
 				@SuppressWarnings("unchecked")
 				HashEntry candidate = (HashEntry)table[n];
 				if (candidate == null) {
-					System.out.println("Inserted after " + i + " tries at " + n);
 					entry.distance = i;
 					table[n] = entry;
 					numElementos++;
 					return;
 				}
 				if (i > candidate.distance) {
-					System.out.println("Replaced after " + i + " tries at " + n);
 					entry.distance = i;
 					table[n] = entry;
 					entry = candidate;
@@ -65,11 +64,14 @@ public class RobinHoodHash<K,V> {
 	}
 
 	private void rehash(HashEntry toRehash) {
-		System.out.println("Rehashing");
-		Object[] newTable = new Object[table.length / 2 * 3];
+		if (rehashing) {
+			throw new IllegalStateException();
+		}
+		rehashing = true;
 		Object[] oldTable = table;
-		table = newTable;
-		int elementosInseridos = 0;
+		table = new Object[(table.length / 2) * 3];
+		int oldCount = numElementos;
+		numElementos = 0; 
 		for (Object o : oldTable) {
 			if (o != null) {
 				@SuppressWarnings("unchecked")
@@ -77,15 +79,20 @@ public class RobinHoodHash<K,V> {
 				if (!candidate.deleted) {
 					int h = (candidate.key.hashCode() & 0x7FFFFFFF) % table.length;
 					HashEntry entry = new HashEntry(candidate.key, candidate.value);
-					insert(entry, h);
+					try {
+						insert(entry, h);
+					} catch (IllegalStateException e) {
+						table = oldTable;
+						numElementos = oldCount;
+						throw new RuntimeException("Could not insert into table.");
+					}
 				}
 			}
-			elementosInseridos++;
 		}
 		int h = (toRehash.key.hashCode() & 0x7FFFFFFF) % table.length;
 		HashEntry entry = new HashEntry(toRehash.key, toRehash.value);
 		insert(entry, h);
-		numElementos = elementosInseridos + 1;
+		rehashing  = false;
 	}
 
 	public V get(K key) {
@@ -102,29 +109,15 @@ public class RobinHoodHash<K,V> {
 			@SuppressWarnings("unchecked")
 			HashEntry candidate = (HashEntry)table[n];
 			if (candidate == null || candidate.distance < i) {
-				System.out.println("Not found after " + i + " tries.");
+				System.out.println(key + " not found after " + i + " tries.");
 				return null;
 			}
 			if (candidate.key.equals(key)) {
-				System.out.println("Found after " + i + " tries.");
+				System.out.println(key + " found after " + i + " tries.");
 				return candidate;
 			}
 		}
-		System.out.println("Not found after " + table.length + " tries.");
+		System.out.println(key + " not found after " + table.length + " tries.");
 		return null;		
-	}
-	
-	public void print() {
-		System.out.println("=======================");
-		for (Object o : table) {
-			@SuppressWarnings("unchecked")
-			HashEntry e = (HashEntry)o;
-			if (e == null) {
-				System.out.println("null");
-			} else {
-				System.out.println(e.key + " - " + e.value + " - " + e.distance);
-			}
-		}
-		System.out.println("=======================");
 	}
 }
