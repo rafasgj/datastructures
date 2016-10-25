@@ -306,16 +306,10 @@ public class Sorting {
 
 	private static <T>
 	long do_inplaceMerge(T[] data, int start, int m, int end, Comparator<T> cmp) {
-		int ops = 0;
+		int ops = 1;
 		for (int i = m+1; i <= end; i++) {
-			for (int j = i; j >= start; j--) {
-				ops++;
-				if (cmp.compare(data[j],data[j-1]) < 0) {
-					ops++;
-					Functions.swap(data, j, j-1);
-				} else {
-					break;
-				}
+			for (int j = i; j >= start && cmp.compare(data[j],data[j-1]) < 0; j--, ops+= 2) {
+				Functions.swap(data, j, j-1);
 			}
 		}
 		return ops;
