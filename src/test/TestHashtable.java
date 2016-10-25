@@ -23,19 +23,12 @@ public class TestHashtable {
 				"Inexistente"};
 		
 		//Hashtable<String, Integer> hash = new Hashtable<>();
-		
 		RobinHoodHash<String, Integer> hash = new RobinHoodHash<>();
 		
 		
 		for (int i = 0; i < nomes.length; i++) {
 			hash.put(nomes[i],i);
 			out.println("Itens: "+hash.size()+"\tLoad: "+hash.loadFactor());
-			if (i == 9) {
-				for (String tst : testNames) {
-					out.println(tst + " retrieves " + hash.get(tst) );
-				}
-			}
-			hash.print();
 		}
 		for (String tst : testNames) {
 			out.println(tst + " retrieves " + hash.get(tst) );
