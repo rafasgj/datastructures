@@ -13,17 +13,17 @@ public class Hashtable<K, V> implements java.lang.Iterable<K> {
 	
 	private class HashKeyIterator implements java.util.Iterator<K> {
 		int current = 0;
-		int index = 0;
+		int index = -1;
 		
 		@SuppressWarnings("unchecked")
 		@Override
 		public K next() {
-			for (int i = index; i < table.length; i++)
-				if (table[i] != null) {
-					index = i;
+			for (index += 1; index < table.length; index++) {
+				if (table[index] != null) {
 					current++;
-					return ((HashEntry)table[i]).key;
+					return ((HashEntry)table[index]).key;
 				}
+			}
 			return null;
 		}
 		@Override
@@ -173,11 +173,11 @@ public class Hashtable<K, V> implements java.lang.Iterable<K> {
 	 * @param key The key to search for.
 	 * @return The value associated with the key, or null.
 	 */
-	@SuppressWarnings("unchecked")
 	public V get(K key) {
 		int[] hashes = generateHashes(key, hashCount);
 		for (int h : hashes) {
 			if (table[mod(h)] != null) {
+				@SuppressWarnings("unchecked")
 				HashEntry entry = (HashEntry)table[mod(h)];
 				if (entry.key.equals(key))
 					return entry.value;
@@ -186,6 +186,42 @@ public class Hashtable<K, V> implements java.lang.Iterable<K> {
 		return null;
 	}
 
+	/**
+	 * Remove
+	 * @param key The key to search for.
+	 * @return The value associated with the key, or null.
+	 */
+	public void set(K key, V value) {
+		remove(key);
+		try {
+			put(key, value);
+		} catch (DuplicateKeyException e) {
+			// should never get here..
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Change the value associated with an existing key, or add a new
+	 * value if the key is not found.
+	 * @param key The key to search for.
+	 * @return The value associated with the key, or null.
+	 */
+	public void remove(K key) {
+		int[] hashes = generateHashes(key, hashCount);
+		for (int h : hashes) {
+			if (table[mod(h)] != null) {
+				@SuppressWarnings("unchecked")
+				HashEntry entry = (HashEntry)table[mod(h)];
+				if (entry.key.equals(key)) {
+					table[mod(h)] = null;
+					return;
+				}
+			}
+		}
+	}
+
+	
 	/**
 	 * Queries the current load factor do the table.
 	 * @return The ratio between the number of elements stored and the
