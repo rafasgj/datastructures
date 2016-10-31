@@ -11,10 +11,10 @@ package algorithms;
 
 import java.util.Comparator;
 
-import util.BinaryHeap;
-import util.FunctionObjects;
-import util.Functions;
-import util.Stack;
+import datastructures.BinaryHeap;
+import datastructures.Stack;
+
+import static util.Functions.swap;
 
 public class Sorting {
 
@@ -48,7 +48,7 @@ public class Sorting {
 				ops++;
 				if (cmp.compare(array[j],array[j-1]) < 0) {
 					ops++;
-					Functions.swap(array, j, j-1);
+					swap(array, j, j-1);
 				} else break;
 			}
 		}
@@ -91,7 +91,7 @@ public class Sorting {
 				}
 			}
 			ops++;
-			Functions.swap(array, i, n);
+			swap(array, i, n);
 		}
 		return ops;
 	}
@@ -126,7 +126,7 @@ public class Sorting {
 				ops++;
 				if (cmp.compare(array[i],array[j]) > 0) {
 					ops++;
-					Functions.swap(array, i, j);
+					swap(array, i, j);
 					swap = true;
 				}
 			}
@@ -309,7 +309,7 @@ public class Sorting {
 		int ops = 1;
 		for (int i = m+1; i <= end; i++) {
 			for (int j = i; j >= start && cmp.compare(data[j],data[j-1]) < 0; j--, ops+= 2) {
-				Functions.swap(data, j, j-1);
+				swap(data, j, j-1);
 			}
 		}
 		return ops;

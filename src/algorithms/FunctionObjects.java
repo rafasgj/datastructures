@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package algorithms;
 
 import java.util.Comparator;
 

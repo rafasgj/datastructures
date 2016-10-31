@@ -1,8 +1,9 @@
 package algorithms;
 
-import util.Stack;
 import java.util.Locale;
 import java.util.Scanner;
+
+import datastructures.Stack;
 
 /**
  * This class provides an arithmetic expression evaluator, using a
