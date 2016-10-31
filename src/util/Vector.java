@@ -87,8 +87,7 @@ public class Vector<T> implements interfaces.Iterable<T> {
 	 * @param index The index of the element to be removed.
 	 */
 	public void remove(int index) {
-		if (index < 0 || index >= count)
-			throw new ArrayIndexOutOfBoundsException(index);
+		validateIndex(index);
 		ensureSpaceAvailable();
 		System.arraycopy(data, index+1, data, index, count-index-1);
 		count--;
@@ -103,6 +102,11 @@ public class Vector<T> implements interfaces.Iterable<T> {
 		insert(count,value);
 	}
 
+	private void validateIndex(int index) {
+		if (index < 0 || index >= count)
+			throw new ArrayIndexOutOfBoundsException(index);
+	}
+	
 	/**
 	 * Returns an element stored at a given index.
 	 * @param index The index of the element to be retrieved.
@@ -110,8 +114,7 @@ public class Vector<T> implements interfaces.Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index < 0 || index >= count)
-			throw new ArrayIndexOutOfBoundsException(index);
+		validateIndex(index);
 		return (T)data[index];
 	}
 	
@@ -133,10 +136,39 @@ public class Vector<T> implements interfaces.Iterable<T> {
 	}
 
 	/**
+	 * Returns the last element of the vector.
+	 * @return The last element of the vector.
+	 */
+	@SuppressWarnings("unchecked")
+	public T last() {
+		if (count > 0)
+			return (T)data[count-1];
+		throw new IllegalStateException("Vector is empty.");
+	}
+	
+	/**
+	 * Check if there are elements in the Vector.
+	 * @return True if there are no elements stored, false otherwise.
+	 */
+	public boolean isEmpty() {
+		return count == 0;
+	}
+	
+	/**
 	 * Return an iterator for the underlying vector.
 	 */
 	@Override
 	public Iterator<T> iterator() {
 		return new VectorIterator<>(this);
+	}
+
+	/**
+	 * Set an element of the vector at a given index to the given value.
+	 * @param level
+	 * @param node
+	 */
+	public void set(int index, T value) {
+		validateIndex(index);
+		data[index] = value;
 	}
 }
