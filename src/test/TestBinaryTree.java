@@ -9,8 +9,8 @@
 
 package test;
 
-import util.BinarySearchTree;
-import util.DuplicateKeyException;
+import datastructures.BinarySearchTree;
+import datastructures.DuplicateKeyException;
 
 public class TestBinaryTree {
 

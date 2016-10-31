@@ -11,7 +11,7 @@ package test;
 
 import java.util.Comparator;
 
-import util.BinaryHeap;
+import datastructures.BinaryHeap;
 
 public class TestHeap {
 	public static void main(String...strings) {

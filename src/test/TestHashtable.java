@@ -11,7 +11,7 @@ package test;
 
 import static java.lang.System.out;
 
-import util.*;
+import datastructures.*;
 
 public class TestHashtable {
 	public static void main(String...strings) throws Exception {

@@ -9,7 +9,7 @@
 
 package test;
 
-import util.Queue;
+import datastructures.Queue;
 
 public class TestQueue {
 

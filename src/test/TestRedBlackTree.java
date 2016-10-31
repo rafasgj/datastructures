@@ -9,8 +9,8 @@
 
 package test;
 
-import util.RedBlackTree;
-import util.DuplicateKeyException;
+import datastructures.DuplicateKeyException;
+import datastructures.RedBlackTree;
 
 public class TestRedBlackTree {
 

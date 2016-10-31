@@ -9,7 +9,7 @@
 
 package test;
 
-import util.Vector;
+import datastructures.Vector;
 
 public class TestVector {
 	public static void main(String...strings) {

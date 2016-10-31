@@ -1,6 +1,6 @@
 package test;
 
-import util.RadixTree;
+import datastructures.RadixTree;
 
 public class TestRadix {
 

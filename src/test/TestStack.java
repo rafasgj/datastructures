@@ -9,7 +9,7 @@
 
 package test;
 
-import util.Stack;
+import datastructures.Stack;
 
 public class TestStack {
 

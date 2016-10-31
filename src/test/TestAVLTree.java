@@ -9,8 +9,8 @@
 
 package test;
 
-import util.AVLTree;
-import util.DuplicateKeyException;
+import datastructures.AVLTree;
+import datastructures.DuplicateKeyException;
 
 public class TestAVLTree {
 

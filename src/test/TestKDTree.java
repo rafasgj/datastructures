@@ -9,8 +9,8 @@
 
 package test;
 
-import util.KDData;
-import util.KDTree;
+import datastructures.KDData;
+import datastructures.KDTree;
 
 class UserKDData extends KDData {
 	private String data;

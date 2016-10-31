@@ -11,8 +11,8 @@ package test;
 
 import java.util.Comparator;
 
+import datastructures.LinkedList;
 import interfaces.BidirectionalIterator;
-import util.LinkedList;
 
 public class TestLinkedList {
 	public static void main(String...strings) {
