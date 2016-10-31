@@ -11,8 +11,7 @@ package algorithms;
 
 import java.util.Comparator;
 
-import util.FunctionObjects;
-import util.Functions;
+import static util.Functions.swap;
 
 /**
  * Provides algorithms to partition a data set.
@@ -79,15 +78,17 @@ public class Partition {
 			int cmp_i = 0, cmp_j = 0;
 			do {
 				i++;
+				partitionOperations++;
 				cmp_i = compare(cmp, values[i], pivot);
 			} while (i < e && cmp_i < 0);
 			do {
 				j--;
+				partitionOperations++;
 				cmp_j = compare(cmp, values[j], pivot);
 			} while (j> s && cmp_j > 0);
 			if (i >= j) return j;
 			partitionOperations++;
-			Functions.swap(values, i, j);
+			swap(values, i, j);
 		}
 	}
 	private static <T> int compare(Comparator<T> cmp, T a , T b) {
