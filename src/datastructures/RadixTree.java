@@ -1,8 +1,8 @@
-package util;
+package datastructures;
 
 import java.util.Locale;
 
-import util.LinkedList;
+import datastructures.LinkedList;
 
 class RadixNode {
 	private String data;

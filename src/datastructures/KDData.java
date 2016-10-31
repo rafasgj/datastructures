@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 public class KDData {
 	private double[] _data;

@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 import interfaces.Iterator;
 

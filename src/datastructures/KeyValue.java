@@ -1,7 +1,7 @@
-package util;
+package datastructures;
 
-public class KeyValue<K extends Comparable<K>, V>
-	implements Comparable<KeyValue<K,V>>
+public class KeyValue<K, V>
+	implements Comparable<KeyValue<Comparable<K>,V>>
 {
 	public final K key;
 	public final V value;
@@ -11,8 +11,8 @@ public class KeyValue<K extends Comparable<K>, V>
 	}
 	
 	@Override
-	public int compareTo(KeyValue<K,V> cmp) {
-		return key.compareTo(cmp.key);
+	public int compareTo(KeyValue<Comparable<K>,V> cmp) {
+		return -1 * cmp.key.compareTo(key); 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -20,7 +20,7 @@ public class KeyValue<K extends Comparable<K>, V>
 	public boolean equals(Object cmp) {
 		if (!(cmp instanceof KeyValue))
 			return false;
-		return this.compareTo((KeyValue<K,V>)cmp) == 0;
+		return key.equals(((KeyValue<K,V>)cmp).key);
 	}
 	
 	@Override

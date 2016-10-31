@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 public class Hashtable<K, V> implements java.lang.Iterable<K> {
 	

@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 public class DuplicateKeyException extends Exception {
 	public DuplicateKeyException(String msg)

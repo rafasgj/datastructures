@@ -7,9 +7,11 @@
  *
  */
 
-package util;
+package datastructures;
 
 import java.util.Comparator;
+
+import util.Functions;
 
 public class BinaryHeap<T> {
 	

@@ -7,11 +7,11 @@
  *
  */
 
-package util;
+package datastructures;
 
 import java.util.NoSuchElementException;
 
-import util.LinkedList;
+import datastructures.LinkedList;
 import interfaces.Iterator;
 
 /**

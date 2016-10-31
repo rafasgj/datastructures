@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 class AVLNode<K extends Comparable<K>,V> {
 	public final K key;

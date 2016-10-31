@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 class RedBlackNode<T extends Comparable<T>> {
 

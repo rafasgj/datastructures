@@ -7,7 +7,7 @@
  *
  */
 
-package util;
+package datastructures;
 
 class BSTNode<T extends Comparable<T>> {
 

@@ -1,4 +1,4 @@
-package util;
+package datastructures;
 
 public class RobinHoodHash<K,V> {
 	
