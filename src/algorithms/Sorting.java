@@ -276,11 +276,11 @@ public class Sorting {
 	public static <T extends Comparable<T>>
 	long inplaceMergeSort(T[] array)
 	{
-		return mergeSort(array, FunctionObjects.less());
+		return inplaceMergeSort(array, FunctionObjects.less());
 	}
 	/**
-	 * Sort the given data using a recursive merge sort and the
-	 * given comparator. 
+	 * Sort the given data using a recursive inplace merge sort
+	 * and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps)
@@ -289,29 +289,47 @@ public class Sorting {
 	public static <T>
 	long inplaceMergeSort(T[] array, Comparator<T> cmp)
 	{
-		return do_SplitMerge(array, 0, array.length-1, cmp);
+		return do_InplaceSplitMerge(array, 0, array.length-1, cmp);
 	}
 
 	private static <T>
-	long do_SplitMerge(T[] data, int start, int end, Comparator<T> cmp) {
-		if (end - start < 1) {
+	long do_InplaceSplitMerge(T[] data, int start, int end, Comparator<T> cmp) {
+		int sz = end - start;
+		if (sz < 1) {
 			return 0;
 		}
-		int m = start + ((end - start)/2);
-		long ops = do_SplitMerge(data, start, m, cmp);
-		ops += do_SplitMerge(data, m+1, end, cmp);
-		ops += do_inplaceMerge(data, start, m, end, cmp);
+		int m = start + (sz/2);
+		long ops = 0;
+		ops += do_InplaceSplitMerge(data, start, m, cmp);
+		ops += do_InplaceSplitMerge(data, m+1, end, cmp);
+		ops += do_inplaceMerge(data, start, m+1, end, cmp);
 		return ops;
 	}
 
 	private static <T>
 	long do_inplaceMerge(T[] data, int start, int m, int end, Comparator<T> cmp) {
-		int ops = 1;
-		for (int i = m+1; i <= end; i++) {
-			for (int j = i; j >= start && cmp.compare(data[j],data[j-1]) < 0; j--, ops+= 2) {
-				swap(data, j, j-1);
+		int ops = 0;
+		int i = start, j = m;
+		while (i < j && j <= end) {
+			ops++;
+			while (i < j && cmp.compare(data[i], data[j]) <= 0) {
+				i++;
 			}
+			if (i >= j) break;
+			ops++;
+			int a = j;
+			while (j <= end && cmp.compare(data[j], data[i]) < 0) {
+				j++;
+			}
+			for (int x = a; x < j; x++) {
+				for (int y = 0; y < a-i; y++) {
+					ops++;
+					swap(data, x-y-1, x-y);
+				}
+			}
+			i += j-a;
 		}
+		
 		return ops;
 	}
 

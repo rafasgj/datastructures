@@ -43,6 +43,12 @@ public class TestSorting {
 				new Sort<Integer>("Selection",
 						(n)-> Sorting.selectionSort((Integer[])n)),
 		};
+
+		@SuppressWarnings("rawtypes")
+		Sort[] medium = {
+				new Sort<Integer>("Inplace Merge",
+						(n)-> Sorting.inplaceMergeSort((Integer[])n)),
+		};
 		
 		@SuppressWarnings("rawtypes")
 		Sort[] fast = {
@@ -58,39 +64,40 @@ public class TestSorting {
 						(n)-> Sorting.mergeSort((Integer[])n)),
 				new Sort<Integer>("Merge Iteractive",
 						(n)-> Sorting.msort((Integer[])n)),
-				new Sort<Integer>("Inplace Merge",
-						(n)-> Sorting.inplaceMergeSort((Integer[])n)),
 		};
 
 		// Small arrays to test correctness.
-		for (Sort<Integer> p : simple)
+		for (Sort<Integer> p : mergeSortArray(simple,medium,fast)) {
 			testAlgorithm(p.name, p.algorithm);
-		for (Sort<Integer> p : fast)
-			testAlgorithm(p.name, p.algorithm);
-
-		// Large arrays to test speed.
-		random = startLargeTest("Large", 64);
-		System.out.println("Negative number of operations, means more than "+
-						   Long.MAX_VALUE + " operations.");
-		for (Sort<Integer> p : simple) {
-			testAlgorithmWithArray(
-					p.name,
-					random.clone(),
-					p.algorithm,
-					false
-			);
-		}
-		for (Sort<Integer> p : fast) {
-			testAlgorithmWithArray(
-					p.name,
-					random.clone(),
-					p.algorithm,
-					false
-			);
 		}
 		
-		// Really Large arrays to test usability of algorithms.
-		random = startLargeTest("Huge", 8*1024);
+		// Large arrays to test speed.
+		random = startLargeTest("Medium", 64);
+		System.out.println("Negative number of operations, means more than "+
+						   Long.MAX_VALUE + " operations.");
+		for (Sort<Integer> p : mergeSortArray(simple,medium,fast)) {
+			testAlgorithmWithArray(
+					p.name,
+					random.clone(),
+					p.algorithm,
+					false
+			);
+		}
+
+		// Larger array for Inplace Merge Sort
+		random = startLargeTest("Large", 128);
+		for (Sort<Integer> p : mergeSortArray(medium,fast)) {
+			testAlgorithmWithArray(
+					p.name,
+					random.clone(),
+					p.algorithm,
+					false
+			);
+		}
+
+		// Really Large arrays to test usability of algorithms
+		// on very large datasets.
+		random = startLargeTest("Huge", (int)(8*1024));
 		for (Sort<Integer> p : fast) {
 			testAlgorithmWithArray(
 					p.name,
@@ -99,6 +106,24 @@ public class TestSorting {
 					false
 			);
 		}
+
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private static Sort[] mergeSortArray(Sort[]... arrays) {
+		int sum = 0;
+		for (Sort[] a : arrays) {
+			sum += a.length;
+		}
+		Sort[] res = new Sort[sum];
+		int i = 0;
+		for (Sort[] a : arrays) {
+			for (Sort s : a) {
+				res[i] = s;
+				i++;
+			}
+		}
+		return res;
 	}
 
 	private static Integer[] startLargeTest(String name, int kElements) {
