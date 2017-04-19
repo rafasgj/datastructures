@@ -85,7 +85,7 @@ public class Partition {
 				j--;
 				partitionOperations++;
 				cmp_j = compare(cmp, values[j], pivot);
-			} while (j> s && cmp_j > 0);
+			} while (j > s && cmp_j > 0);
 			if (i >= j) return j;
 			partitionOperations++;
 			swap(values, i, j);
