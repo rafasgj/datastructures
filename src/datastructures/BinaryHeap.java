@@ -84,8 +84,8 @@ public class BinaryHeap<T> {
 
 	private void siftDown(int n) {
 		heapifyOperations++;
-		int left = 2*(n+1)-1;
-		int right = 2*(n+1);
+		int left = 2*n+1;
+		int right = 2*n+2;
 		int other = n;
 		if (left >= count)
 			return;

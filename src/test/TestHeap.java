@@ -28,14 +28,15 @@ public class TestHeap {
 			heap.push(i);
 		
 		while (!heap.isEmpty())
-			System.out.println(heap.pop()+" ");
+			System.out.print(heap.pop()+" ");
 		System.out.println();
-		
 		System.out.println(new String(new char[20]).replace("\0", "-"));
-		Integer[] array = {14,8,7,2,3,16,15,10,1,9,12,6,13,4,5,11};
+		Integer[] array = {14,8,7,2,3,16,15,10,1,9,12,6,13,4,5};
 		heap = BinaryHeap.heapify(array, heapOrder);
+		for (int i : array)
+			System.out.println(i);
 		while (!heap.isEmpty())
-			System.out.println(heap.pop()+" ");
+			System.out.print(heap.pop()+" ");
 		System.out.println();
 	}
 }
