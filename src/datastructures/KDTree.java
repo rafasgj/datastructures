@@ -10,8 +10,8 @@
 package datastructures;
 
 import java.util.Comparator;
-
 import algorithms.Partition;
+import static util.Functions.swap;
 
 class HeapStorage {
 	public KDNode node;
@@ -25,7 +25,45 @@ class HeapStorage {
 	}
 }
 
+class dimension_cmp implements Comparator<KDData> {
+	int dimension;
+	public dimension_cmp(int d) { dimension = d; }
+	@Override
+	public int compare(KDData o1, KDData o2) {
+		double x = o1.get(dimension) - (o2.get(dimension));
+		if (x < 0) return -1;
+		if (x > 0) return +1;		
+		return 0;
+	}
+};
+
+
 class KDNode {
+
+	public static KDNode createNode(KDData[] points, int s, int e, int d) {
+		if (s > e)
+			return null;
+		int k = points[0].length();
+		int dim = d % k;
+		int m = (s+e)/2;
+		dimension_cmp cmp = new dimension_cmp(dim);
+		Partition.nth_element(points,s,e, m, cmp);
+		for (int i = m+1; i <= e; i++) {
+			if (cmp.compare(points[i],points[m]) == 0) {
+				swap(points,m+1,i);
+				m++;
+			}
+		}
+		KDNode node = new KDNode(points[m], d);
+		node.left = createNode(points, s, m-1, (d+1) % k);
+		if (node.left != null)
+			node.left.parent = node;
+		node.right = createNode(points, m+1, e, (d+1) % k);
+		if (node.right != null)
+			node.right.parent = node;
+		return node;
+	}
+	
 	KDData data;
 	KDNode left;
 	KDNode right;
@@ -33,66 +71,37 @@ class KDNode {
 	int dimension;
 
 	public static int nodesEvaluated; 
-	
-	private final Comparator<KDData> datacmp =
-			new Comparator<KDData>() {
-				@Override
-				public int compare(KDData o1, KDData o2) {
-					double x = o1.get(dimension) - (o2.get(dimension));
-					if (x < 0) return +1;
-					if (x > 0) return -1;		
-					return 0;
-				}
-			};
-	
+		
 	private final Comparator<HeapStorage> distcmp =
 			new Comparator<HeapStorage>() {
 				@Override
 				public int compare(HeapStorage o1, HeapStorage o2) {
 					double x = o1.distance - o2.distance;
-					if (x < 0) return +1;
-					if (x > 0) return -1;		
+					if (x < 0) return -1;
+					if (x > 0) return +1;		
 					return 0;
 				}
 			};
 
 	@Override
 	public String toString() {
-		String res = "(" + data;
+		String res = "(" + data.toString();
 		if (left == null)
 			res += " _";
 		else
-			res += left;
+			res += left.toString();
 		if (right == null)
 			res += " _";
 		else
-			res += right;
+			res += right.toString();
 		return res + ")";
 	}
 	
-
-	KDNode(KDData data) {
+	private KDNode(KDData data, int dimension) {
 		this.data = data;
+		this.dimension = dimension;
 	}
 	
-	KDNode(KDData[] points, int s, int e, int d) {
-		this.dimension = d;
-		int m = (s+e)/2;
-		Partition.nth_element(points, s, e, m, datacmp);
-		this.data = points[m];
-		if (m-s > 1)
-			left = new KDNode(points, s, m-1, (d+1) % this.data.length());
-		else if (m-s > 0)
-			left = new KDNode(points[s]);
-		if (e-m > 1)
-			right = new KDNode(points, m+1, e, (d+1) % this.data.length());
-		else if (m-s > 0)
-			right = new KDNode(points[e]);
-		
-		if (left != null) left.parent = this;
-		if (right != null) right.parent = this;
-	}
-
 	/**
 	 * Search for the K nearest points to a given point.
 	 * @param point The point which is the center of the search radius.
@@ -125,11 +134,6 @@ class KDNode {
 
 		double dist = data.squaredDistance(point);
 		nodesEvaluated++;
-		/* //DEBUG
-		System.out.print("Evaluating: "); data.print();
-		System.out.print("\tDistance: " + dist);
-		System.out.println();
-		*/
 		if (found.size() < k) {
 			HeapStorage elem = HeapStorage.instance(this, dist);
 			found.push(elem);
@@ -151,6 +155,8 @@ class KDNode {
 	}
 }
 
+
+
 /**
  * Implements a KD Tree, with nearest neighbor search.
  * @param <T>
@@ -163,7 +169,7 @@ public class KDTree {
 	 * @param points The point data.
 	 */
 	public KDTree(KDData[] points) {
-		root = new KDNode(points, 0, points.length-1, 0);
+		root = KDNode.createNode(points, 0, points.length-1, 0);
 	}
 
 	/**

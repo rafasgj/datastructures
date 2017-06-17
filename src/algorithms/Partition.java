@@ -11,6 +11,8 @@ package algorithms;
 
 import java.util.Comparator;
 
+import util.Pair;
+
 import static util.Functions.swap;
 
 /**
@@ -23,82 +25,89 @@ public class Partition {
 	public static long partitionOperations = 0;
 
 	/**
-	 * Given a pivot, partitions data in less than the pivot and greater
+	 * <p>Given a pivot, partitions data in less than the pivot and greater
 	 * than the pivot. The data type used must be able to compare against
 	 * itself. If there's a value that is equal to the given pivot, if the
 	 * whole data is sorted, that value would already be on its final
-	 * position.
-	 * Returns the index where the list was partitioned.
+	 * position.</p>
+	 * <p>Returns the indexes where the list was partitioned.</p>
 	 * @param values The data set.
-	 * @param pivot The value used as comparator.
-	 * @return The index where the list was partitioned.
+	 * @param pivot The index of the value used as pivot.
+	 * @return The indexes where the list was partitioned, with the values
+	 * between both indexes being the same.
 	 */
 	public static <T extends Comparable<T>>
-	int partition(T[] values, T pivot)
+	Pair<Integer,Integer> partition(T[] values, T pivot)
 	{
 		return partition(values, pivot, FunctionObjects.less());
 	}
 	
 	/**
-	 * Given a pivot, partitions data with respect to the comparator given.
-	 * If there's a value that is equal to the given pivot, if the
-	 * whole data is sorted, using the same comparator, that value would
-	 * already be on its final position.
-	 * Returns the index where the list was partitioned.
+	 * <p>Given a pivot, partitions data with respect to the comparator
+	 * given. If there's a value that is equal to the given pivot, if
+	 * the whole data is sorted, using the same comparator, that value
+	 * would already be on its final position.</p>
+	 * <p>Returns the indexes where the list was partitioned.</p>
 	 * @param values The data set.
-	 * @param pivot The value used as comparator.
+	 * @param pivot The index of the value used as pivot.
 	 * @param cmp The comparator to be used.
-	 * @return The index where the list was partitioned.
+	 * @return The indexes where the list was partitioned, with the values
+	 * between both indexes being the same.
 	 */
-	public static <T> int partition(T[] values, T pivot, Comparator<T> cmp) {
+	public static <T>
+	Pair<Integer,Integer> partition(T[] values, T pivot, Comparator<T> cmp)
+	{
 		return partition(values, 0, values.length-1, pivot, cmp);
 	}
 
 	/**
-	 * Given a pivot, partitions a portion of the given data, starting at
-	 * index 's' end ending at index 'e' (both included), with respect to
-	 * the comparator given.
-	 * If there's a value that is equal to the given pivot, if the
+	 * <p>Given a pivot, partitions a portion of the given data, starting
+	 * at index 's' end ending at index 'e' (both included), with respect
+	 * to the comparator given.</p>
+	 * <p>If there's a value that is equal to the given pivot, if the
 	 * whole data is sorted, using the same comparator, that value would
-	 * already be on its final position.
-	 * Returns the index where the list was partitioned.
-	 * @param values The data set.
+	 * already be on its final position.</p>
+	 * <p>Returns the indexes where the list was partitioned.</p>
+	 * <p>Implements Dijkstra's 3-way partitioning.</p>
+	 * @param array The data set.
 	 * @param s The initial index of the data.
 	 * @param e The final index of the data.
-	 * @param pivot The value used as comparator.
+	 * @param pivot The index of the value used as comparator.
 	 * @param cmp The comparator to be used.
 	 * @return The index where the list was partitioned.
 	 */
 	public static <T>
-	int partition(T[] values, int s, int e, T pivot, Comparator<T> cmp)
+	Pair<Integer,Integer> partition(T[] array, int s, int e, T pivot, Comparator<T> cmp)
 	{
-		partitionOperations = 0;
-		int i = s-1, j = e+1;
-		while (true) {
-			int cmp_i = 0, cmp_j = 0;
-			do {
-				i++;
-				partitionOperations++;
-				cmp_i = compare(cmp, values[i], pivot);
-			} while (i < e && cmp_i < 0);
-			do {
-				j--;
-				partitionOperations++;
-				cmp_j = compare(cmp, values[j], pivot);
-			} while (j > s && cmp_j > 0);
-			if (i >= j) return j;
-			partitionOperations++;
-			swap(values, i, j);
-		}
-	}
-	private static <T> int compare(Comparator<T> cmp, T a , T b) {
-		partitionOperations++;
-		return cmp.compare(a, b);
+			int i = s;
+		    int j = s;
+		    int n = e;
+
+		    partitionOperations = 0;
+		    while (j <= n) {
+			    partitionOperations++;
+		    	int tst = cmp.compare(array[j],pivot);
+		        if (tst < 0) {
+		            if (i != j) {
+					    partitionOperations++;
+		            	swap(array,i,j);
+		            }
+		            i++;
+		            j++;
+		        } else if (tst > 0) {
+				    partitionOperations++;
+		            swap(array,j,n);
+		            n--;
+		        } else {
+		            j++;
+		        }
+		    }
+		    return new Pair<>(i,n);
 	}
 
 	/**
-	 * Partially sort the given data, so that the n<sup>th</sup> element is
-	 * in its final position, if the whole data was sorted.
+	 * <p>Partially sort the given data, so that the n<sup>th</sup>
+	 * element is in its final position, if the whole data was sorted.</p>
 	 * @param values The data set.
 	 * @param n The position of the element.
 	 */
@@ -109,9 +118,9 @@ public class Partition {
 	}
 
 	/**
-	 * Partially sort the given data, so that the n<sup>th</sup> element is
-	 * in its final position, if the whole data was sorted, with the given
-	 * comparator.
+	 * <p>Partially sort the given data, so that the n<sup>th</sup>
+	 * element is in its final position, if the whole data was sorted,
+	 * with the given comparator.</p>
 	 * @param values The data set.
 	 * @param n The position of the element.
 	 * @param cmp The comparator to be used.
@@ -122,9 +131,9 @@ public class Partition {
 
 	
 	/**
-	 * Partially sort the given data, so that the n<sup>th</sup> element is
-	 * in its final position, if the whole data was sorted, with the given
-	 * comparator.
+	 * <p>Partially sort the given data, so that the n<sup>th</sup>
+	 * element is in its final position, if the whole data was sorted,
+	 * with the given comparator.<p>
 	 * @param values The data set.
 	 * @param s The index of the first value.
 	 * @param e The index of the first value.
@@ -136,9 +145,10 @@ public class Partition {
 	}
 	
 	/**
-	 * Partially sort the given data, so that the n<sup>th</sup> element is
-	 * in its final position, if the whole data was sorted, with the given
-	 * comparator.
+	 * <p>Partially sort the given data, so that the n<sup>th</sup>
+	 * element is in its final position, if the whole data was sorted,
+	 * with the given comparator.</p>
+	 * <p>Implemented as the <i>Quickselect</i> algorithm.</p>
 	 * @param values The data set.
 	 * @param s The index of the first value.
 	 * @param e The index of the first value.
@@ -147,24 +157,65 @@ public class Partition {
 	 */
 	public static <T>
 	void nth_element(T[] values, int s, int e, int n, Comparator<T> cmp) {
-		T pivot;
+		int pivot;
 		int min = s;
 		int max = e;
+		Pair<Integer, Integer> ndx;
 		while (min != max) {
+			// select pivot
 			int med = (min+max)/2;
-			pivot=median_of_three(values[min],values[med],values[max],cmp);
-			int index = partition(values, min, max, pivot, cmp);
-			if (index == n)
-				return;
-			if (index > n)
-				max = index-1;
-			else
-				min = index+1;
+			pivot = median_of_three(values,min,med,max,cmp);
+			// partition
+			ndx = partition(values, min, max, values[pivot], cmp);
+			// recursion
+			if (n < ndx.first)
+				max = ndx.first - 1;
+			else if (n > ndx.second)
+				min = ndx.second + 1;
+			else return;
 		}
 	}
 
 	/**
-	 * Computes the median value of three values.
+	 * <p>Computes the index of the median of three values.</p>
+	 * @param values The data set.
+	 * @param i1 The first  value.
+	 * @param i2 The second value.
+	 * @param i3 The third value.
+	 * @return The index of the values which is the median of
+	 * the values given.
+	 */
+	public static <T extends Comparable<T>>
+	int median_of_three(T[] values, int i1, int i2, int i3)
+	{
+		return median_of_three(values,i1,i2,i3,FunctionObjects.less());
+	}
+
+	/**
+	 * <p>Computes the index of the median of three values, given
+	 * a comparator.</p>
+	 * @param values The data set.
+	 * @param i1 The first  value.
+	 * @param i2 The second value.
+	 * @param i3 The third value.
+	 * @param cmp The comparator to use.
+	 * @return The index of the values which is the median of
+	 * the values given.
+	 */
+	public static <T>
+	int median_of_three(T[] values, int i1, int i2, int i3, Comparator<T> cmp)
+	{
+		T v1 = values[i1];
+		T v2 = values[i2];
+		T v3 = values[i3];
+		T v = median_of_three(v1, v2, v3, cmp);
+		if (v.equals(v1)) return i1;
+		if (v.equals(v2)) return i2;
+		return i3;
+	}
+	
+	/**
+	 * <p>Computes the median value of three values.</p>
 	 * @param v1 The first  value.
 	 * @param v2 The second value.
 	 * @param v3 The third value.
@@ -176,7 +227,7 @@ public class Partition {
 	}
 	
 	/**
-	 * Computes the median value of three values.
+	 * <p>Computes the median value of three values.</p>
 	 * @param v1 The first  value.
 	 * @param v2 The second value.
 	 * @param v3 The third value.
@@ -187,8 +238,13 @@ public class Partition {
 		int a = cmp.compare(v1, v2);
 		int b = cmp.compare(v1, v3);
 		int c = cmp.compare(v2, v3);
-		if ((a >= 0 && b <= 0) || (a <= 0 && b >=0)) return v1;
-		if ((a <= 0 && c <= 0) || (a >= 0 && c >=0)) return v2;
+		if (a <= 0) {
+			if (b >= 0) return v1;
+			if (c <= 0) return v2;
+			return v3;
+		}
+		if (b <= 0) return v1;
+		if (c >= 0) return v2;
 		return v3;
 	}
 

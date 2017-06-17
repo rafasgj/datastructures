@@ -1,5 +1,5 @@
 /*
- * Data Structures and Algorithms.
+m * Data Structures and Algorithms.
  * Copyright (C) 2016 Rafael Guterres Jeffman
  *
  * See the LICENSE file accompanying this source code, for
@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 import datastructures.BinaryHeap;
 import datastructures.Stack;
+import util.Pair;
 
 import static util.Functions.swap;
 
@@ -158,32 +159,26 @@ public class Sorting {
 	public static <T>
 	long qsort(T[] array, Comparator<T> cmp)
 	{
-		class Pair {
-			int s, e;
-			public Pair(int s, int e) {
-				this.s = s;
-				this.e = e;
-			}
-		}
+		Pair<Integer,Integer> ndx;
 		long ops = 0;
-		Stack<Pair> callStack = new Stack<>();
-		callStack.push(new Pair(0,array.length-1));
+		Stack<Pair<Integer,Integer>> callStack = new Stack<>();
+		callStack.push(new Pair<>(0,array.length-1));
 		while (!callStack.isEmpty()) {
-			Pair p = callStack.pop();
-			int s = p.s, e = p.e;
+			Pair<Integer,Integer> p = callStack.pop();
+			int s = p.first, e = p.second;
 			if (s >= e) continue;
 			int med = (s + e)/2;
-			T pivot = Partition.median_of_three(array[s],array[med],array[e],cmp);
-			int n = Partition.partition(array, s, e, pivot, cmp);
+			int pivot = Partition.median_of_three(array,s,med,e,cmp);
+			ndx = Partition.partition(array, s, e, array[pivot], cmp);
 			ops += Partition.partitionOperations;
-			int a = n - s;
-			int b = e - n;
+			int a = ndx.first - s;
+			int b = e - ndx.second;
 			if (a < b) {
-				callStack.push(new Pair(s,n));
-				callStack.push(new Pair(n+1,e));
+				callStack.push(new Pair<>(s,ndx.first-1));
+				callStack.push(new Pair<>(ndx.second+1,e));
 			} else {
-				callStack.push(new Pair(n+1,e));
-				callStack.push(new Pair(s,n));
+				callStack.push(new Pair<>(ndx.second+1,e));
+				callStack.push(new Pair<>(s,ndx.first-1));
 			}
 		}
 		return ops;
@@ -218,20 +213,21 @@ public class Sorting {
 	private static <T>
 	long do_quick_sort(T[] array, int s, int e, Comparator<T> cmp)
 	{
+		Pair<Integer, Integer> ndx;
 		if (s >= e) return 0;
 		long ops = 0;
 		int med = (s + e)/2;
-		T pivot = Partition.median_of_three(array[s],array[med],array[e],cmp);
-		int n = Partition.partition(array, s, e, pivot, cmp);
+		int pivot = Partition.median_of_three(array,s,med,e,cmp);
+		ndx = Partition.partition(array, s, e, array[pivot], cmp);
 		ops += Partition.partitionOperations;
-		int a = n - s;
-		int b = e - n;
+		int a = ndx.first - s;
+		int b = e - ndx.second;
 		if (a < b) {
-			ops += do_quick_sort(array, s, n, cmp);
-			ops += do_quick_sort(array, n+1, e, cmp);
+			ops += do_quick_sort(array, s, ndx.first-1, cmp);
+			ops += do_quick_sort(array, ndx.second+1, e, cmp);
 		} else {
-			ops += do_quick_sort(array, n+1, e, cmp);
-			ops += do_quick_sort(array, s, n, cmp);
+			ops += do_quick_sort(array, ndx.second+1, e, cmp);
+			ops += do_quick_sort(array, s, ndx.first-1, cmp);
 		}
 		return ops;
 	}
@@ -474,6 +470,7 @@ public class Sorting {
 	private static <T>
 	long do_introsort(T[] array, int s, int e, int depth, Comparator<T> cmp)
 	{
+		Pair<Integer,Integer> ndx;
 		long ops = 0;
 		int sz = 1+e-s;
 		if (sz <= 1) return 0;
@@ -486,11 +483,11 @@ public class Sorting {
 			return ops;
 		} else {
 			int med = (s + e)/2;
-			T pivot=Partition.median_of_three(array[s],array[med],array[e],cmp);
-			int n = Partition.partition(array, s, e, pivot, cmp);
+			int pivot = Partition.median_of_three(array,s,med,e,cmp);
+			ndx = Partition.partition(array, s, e, array[pivot], cmp);
 			ops = Partition.partitionOperations;
-			ops += do_introsort(array, s, n-1, depth-1, cmp);
-			ops += do_introsort(array, n+1, e, depth-1, cmp);
+			ops += do_introsort(array, s, ndx.first-1, depth-1, cmp);
+			ops += do_introsort(array, ndx.second+1, e, depth-1, cmp);
 			return ops;
 		}
 	}

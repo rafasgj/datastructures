@@ -33,14 +33,21 @@ class UserKDData extends KDData {
 public class TestKDTree {
 
 	public static void main(String[] args) {
-		int[] x = {10,15, 5, 6, 2, 12, 7};
-		int[] y = {1, 5, 5, 2, 12, 4, 8};
-		String[] data = {"RS", "SC", "PR", "RJ", "SP", "MG", "ES"};
+		int[] x = {  5,  2,  5,  9,  4,  5,  5,  8,  7 };
+		int[] y = {  8,  3,  4,  6,  7,  3,  9,  1,  2 };
+		//int[] x = { 10, 15,  5,  6,  2, 12,  7,  8,  9 };
+		//int[] y = {  1,  5,  5,  2, 12,  4,  8,  8,  7 };
+		String[] data = {"RS", "SC", "PR", "RJ", "SP", "MG", "ES", "CE", "DF"};
+		
 		KDData[] p = new UserKDData[x.length]; 
 		for (int i = 0; i < x.length; i++) {
 			p[i] = new UserKDData(x[i],y[i],data[i]);
 		}
 		
+		for (KDData k : p) {
+			System.out.println(k);
+		}
+		System.out.println("------");
 		KDTree kd = new KDTree(p);
 		System.out.println(kd);
 		
