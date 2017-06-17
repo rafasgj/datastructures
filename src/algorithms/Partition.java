@@ -11,6 +11,7 @@ package algorithms;
 
 import java.util.Comparator;
 
+import util.FunctionObjects;
 import util.Pair;
 
 import static util.Functions.swap;

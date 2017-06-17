@@ -35,21 +35,20 @@ public class TestSorting {
 	@SuppressWarnings("unchecked")
 	public static void main(String...args) {
 		@SuppressWarnings("rawtypes")
-		Sort[] simple = {/*
+		Sort[] simple = {
 				new Sort<Integer>("Insertion",
 						(n)-> Sorting.insertionSort((Integer[])n)),
 				new Sort<Integer>("Bubble",
 						(n)-> Sorting.bubbleSort((Integer[])n)),
 				new Sort<Integer>("Selection",
 						(n)-> Sorting.selectionSort((Integer[])n)),
-*/		};
+		};
 
 		@SuppressWarnings("rawtypes")
 		Sort[] medium = {
-/*
  				new Sort<Integer>("Inplace Merge",
 						(n)-> Sorting.inplaceMergeSort((Integer[])n)),
-*/		};
+		};
 		
 		@SuppressWarnings("rawtypes")
 		Sort[] fast = {
@@ -57,7 +56,7 @@ public class TestSorting {
 						(n)-> Sorting.quickSort((Integer[])n)),
 				new Sort<Integer>("Quick Iterative",
 						(n)-> Sorting.qsort((Integer[])n)),
-/*				new Sort<Integer>("Heap",
+				new Sort<Integer>("Heap",
 						(n)-> Sorting.heapSort((Integer[])n)),
 				new Sort<Integer>("Intro",
 						(n)-> Sorting.introSort((Integer[])n)),
@@ -65,7 +64,7 @@ public class TestSorting {
 						(n)-> Sorting.mergeSort((Integer[])n)),
 				new Sort<Integer>("Merge Iteractive",
 						(n)-> Sorting.msort((Integer[])n)),
-*/		};
+		};
 
 		// Small arrays to test correctness.
 		for (Sort<Integer> p : mergeSortArray(simple,medium,fast)) {

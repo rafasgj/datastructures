@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 import datastructures.BinaryHeap;
 import datastructures.Stack;
+import util.FunctionObjects;
 import util.Pair;
 
 import static util.Functions.swap;

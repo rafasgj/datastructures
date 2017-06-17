@@ -9,7 +9,30 @@
 
 package datastructures;
 
+import java.util.Comparator;
+
+/**
+ * <p>This class is the base for all classes used as data
+ * for a KDTree. You should extend this base class with
+ * your own class.</p>
+ * <p>This class uses the Euclidean Distance to compute
+ * the distance between two objectes.</p>
+ */
 public class KDData {
+	/**
+	 * Provides a comparator for a given KDData object, based
+	 * on the dimension it splits on a KDTree.
+	 */
+	public static class DimensionComparator implements Comparator<KDData>
+	{
+		int dimension;
+		public DimensionComparator(int d) { dimension = d; }
+		@Override
+		public int compare(KDData o1, KDData o2) {
+			return (int)Math.signum(o1.get(dimension) - o2.get(dimension));
+		}
+	};
+
 	private double[] _data;
 
 	@SafeVarargs
@@ -25,17 +48,13 @@ public class KDData {
 		return _data.length;
 	}
 
-	public double squaredDistance(KDData point) {
+	public double distance(KDData point) {
 		double sum = 0.0;
 		for (int i = 0; i < _data.length; i++) {
 			double x = _data[i] - point._data[i];
 			sum += x*x;
 		}	
-		return sum;
-	}
-
-	public double distance(KDData point) {
-		return Math.sqrt(squaredDistance(point));
+		return Math.sqrt(sum);
 	}
 
 	@Override

@@ -32,7 +32,10 @@ public class BinaryHeap<T> {
 	 */
 	public long heapifyOperations;
 	/**
-	 * Creates a new heap, given the comparator to use.
+	 * <p>Creates a new heap, given the comparator to use.</p>
+	 * @param cmp The comparator function. Use FunctionObjects.less to
+	 * create a <i>minimum heap</i>, use FunctionObjects.greater to
+	 * create a <i>maximum heap</i>.
 	 */
 	@SuppressWarnings("unchecked")
 	public BinaryHeap(Comparator<T> cmp) {
@@ -49,8 +52,8 @@ public class BinaryHeap<T> {
 	}
 	
 	/**
-	 * Creates a binary heap from existing data. The data should be, after
-	 * this call, be owned only by the heap.
+	 * <p>Creates a binary heap from existing data. The data should be,
+	 * after this call, be owned only by the heap.</p>
 	 * @param data The data to be used for the heap.
 	 * @return The created BinaryHeap.
 	 */
@@ -106,7 +109,7 @@ public class BinaryHeap<T> {
 	}
 	
 	/**
-	 * Query if there are elements on the heap.
+	 * <p>Query if there are elements on the heap.</p>
 	 * @return True if there are elements, false otherwise.
 	 */
 	public boolean isEmpty() {
@@ -114,7 +117,7 @@ public class BinaryHeap<T> {
 	}
 	
 	/**
-	 * Return the element at the top of the heap, without removing it.
+	 * <p>Return the element at the top of the heap, without removing it.</p>
 	 * @return The element at the top of the heap.
 	 */
 	public T peek() {
@@ -122,7 +125,7 @@ public class BinaryHeap<T> {
 	}
 	
 	/**
-	 * Add a new element to the heap.
+	 * <p>Add a new element to the heap.</p>
 	 * @param elem The element to be added to the heap.
 	 */
 	public void push(T elem) {
@@ -144,6 +147,7 @@ public class BinaryHeap<T> {
 		}
 	}
 	
+	//
 	@SuppressWarnings("unchecked")
 	private void ensureEnoughSpace() {
 		if (count < data.length)
@@ -155,7 +159,7 @@ public class BinaryHeap<T> {
 	}
 	
 	/**
-	 * Remove the top element of the heap and return it.
+	 * <p>Remove the top element of the heap and return it.</p>
 	 * @return The top element of the heap, or null, if the heap is empty.
 	 */
 	public T pop() {
@@ -169,6 +173,10 @@ public class BinaryHeap<T> {
 		return res;
 	}
 
+	/**
+	 * <p>Query the number of elements stored on the heap.</p>
+	 * @return The current number of elements.
+	 */
 	public int size() {
 		return count;
 	}
