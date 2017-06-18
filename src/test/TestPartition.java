@@ -10,6 +10,7 @@
 package test;
 
 import algorithms.Partition;
+import util.Pair;
 
 public class TestPartition {
 	
@@ -51,11 +52,11 @@ public class TestPartition {
 			System.out.print(array[i]+" ");
 		System.out.println();
 		System.out.println("Pivot: " + pivot);
-		int p = Partition.partition(array, pivot);
-		for (int i = 0; i < p; i++)
+		Pair<Integer, Integer> p = Partition.partition(array, pivot);
+		for (int i = 0; i < p.first; i++)
 			System.out.print(array[i]+" ");
 		System.out.println();
-		for (int i = p; i < array.length; i++)
+		for (int i = p.second; i < array.length; i++)
 			System.out.print(array[i]+" ");
 		System.out.println();		
 	}
