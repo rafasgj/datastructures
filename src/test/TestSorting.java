@@ -36,7 +36,7 @@ public class TestSorting {
 	public static void main(String...args) {
 		@SuppressWarnings("rawtypes")
 		Sort[] simple = {
-				new Sort<Integer>("Insertion",
+ 				new Sort<Integer>("Insertion",
 						(n)-> Sorting.insertionSort((Integer[])n)),
 				new Sort<Integer>("Bubble",
 						(n)-> Sorting.bubbleSort((Integer[])n)),
@@ -46,6 +46,8 @@ public class TestSorting {
 
 		@SuppressWarnings("rawtypes")
 		Sort[] medium = {
+				new Sort<Integer>("Binary Insertion",
+						(n)-> Sorting.binaryInsertionSort((Integer[])n)),
  				new Sort<Integer>("Inplace Merge",
 						(n)-> Sorting.inplaceMergeSort((Integer[])n)),
 		};
@@ -70,7 +72,6 @@ public class TestSorting {
 		for (Sort<Integer> p : mergeSortArray(simple,medium,fast)) {
 			testAlgorithm(p.name, p.algorithm);
 		}
-		
 		// Large arrays to test speed.
 		random = startLargeTest("Medium", 64);
 		System.out.println("Negative number of operations, means more than "+
@@ -106,7 +107,6 @@ public class TestSorting {
 					false
 			);
 		}
-
 	}
 	
 	@SuppressWarnings("rawtypes")

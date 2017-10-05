@@ -20,8 +20,72 @@ import static util.Functions.swap;
 
 public class Sorting {
 
+
 	/**
-	 * Sort the given data using insertion sort.
+	 * <p>Sort the given data using insertion sort with binary for
+	 * searching the element position.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T extends Comparable<T>>
+	long binaryInsertionSort(T[] array) {
+		return binaryInsertionSort(array, FunctionObjects.less());
+	}
+	
+	/**
+	 * <p>Sort the given data using insertion sort with binary for
+	 * searching the element position.
+	 * @param array The array to be sorted.
+	 * @return The number of operations (comparisons and swaps)
+	 * performed.
+	 */
+	public static <T>
+	long binaryInsertionSort(T[] array, Comparator<T> cmp) {
+		// this is annoying that Java methods cannot contain other methods...
+		class binaryInsertionSortHelper {
+			long ops = 0;
+			int binarySearchIndex(T[] array, int start, int end, T data) {
+				ops++;
+				if (end <= start) {
+					return (cmp.compare(data,array[start]) > 0)? start + 1 : start;
+				}
+				int mid = (int)((start / 2.0) + (end / 2.0));
+				ops++;
+				int c = cmp.compare(data,array[mid]);
+				if (c == 0) {
+					do {
+						mid++;
+						ops++;
+					} while (data.equals(array[mid]));
+					return mid;
+				}
+				if (c < 0)
+					return binarySearchIndex(array, start, mid-1, data);
+				return binarySearchIndex(array, mid+1, end, data);
+			}
+		}
+		binaryInsertionSortHelper searcher = new binaryInsertionSortHelper();
+		
+		long ops = 0;
+		int j = 1;
+		for (int i = 1; i < array.length; i++) {
+			int loc = searcher.binarySearchIndex(array,0,j, array[j]);
+			if (loc < j) {
+				T tmp = array[i];
+				int dist = i - loc;
+				System.arraycopy(array, loc, array, loc+1, dist);
+				array[loc] = tmp;
+				ops += dist;
+			}
+			j++;
+		}
+		return searcher.ops + ops;
+	}
+	
+	/**
+	 * <p>Sort the given data using insertion sort using linear search
+	 * for finding the element position.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -33,7 +97,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using insertion sort and the given
+	 * <p>Sort the given data using insertion sort and the given
 	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -58,7 +122,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using selection sort.
+	 * <p>Sort the given data using selection sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -70,7 +134,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using selection sort and the given
+	 * <p>Sort the given data using selection sort and the given
 	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -99,7 +163,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using bubble sort.
+	 * <p>Sort the given data using bubble sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -111,7 +175,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using bubble sort and the given comparator.
+	 * <p>Sort the given data using bubble sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps)
@@ -138,7 +202,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using an iterative version of quick sort.
+	 * <p>Sort the given data using an iterative version of quick sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -150,7 +214,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using an iterative quick sort and the given
+	 * <p>Sort the given data using an iterative quick sort and the given
 	 * comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -187,7 +251,7 @@ public class Sorting {
 
 	
 	/**
-	 * Sort the given data using quick sort.
+	 * <p>Sort the given data using quick sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -199,7 +263,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using quick sort and the given comparator.
+	 * <p>Sort the given data using quick sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps)
@@ -211,6 +275,7 @@ public class Sorting {
 		return do_quick_sort(array, 0, array.length-1, cmp);
 	}
 
+	// Actually execute quick sort.
 	private static <T>
 	long do_quick_sort(T[] array, int s, int e, Comparator<T> cmp)
 	{
@@ -235,7 +300,7 @@ public class Sorting {
 	
 
 	/**
-	 * Sort the given data using heap sort.
+	 * <p>Sort the given data using heap sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -247,7 +312,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using heap sort and the given comparator.
+	 * <p>Sort the given data using heap sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps)
@@ -265,7 +330,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using an inplace merge sort.
+	 * <p>Sort the given data using an inplace merge sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -275,8 +340,9 @@ public class Sorting {
 	{
 		return inplaceMergeSort(array, FunctionObjects.less());
 	}
+	
 	/**
-	 * Sort the given data using a recursive inplace merge sort
+	 * <p>Sort the given data using a recursive inplace merge sort
 	 * and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -288,7 +354,7 @@ public class Sorting {
 	{
 		return do_InplaceSplitMerge(array, 0, array.length-1, cmp);
 	}
-
+	// do the inplace split merge.
 	private static <T>
 	long do_InplaceSplitMerge(T[] data, int start, int end, Comparator<T> cmp) {
 		int sz = end - start;
@@ -302,7 +368,7 @@ public class Sorting {
 		ops += do_inplaceMerge(data, start, m+1, end, cmp);
 		return ops;
 	}
-
+	// actually do the merge without auxiliary memory.
 	private static <T>
 	long do_inplaceMerge(T[] data, int start, int m, int end, Comparator<T> cmp) {
 		int ops = 0;
@@ -332,7 +398,7 @@ public class Sorting {
 
 	
 	/**
-	 * Sort the given data using a recursive merge sort.
+	 * <p>Sort the given data using a recursive merge sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -343,7 +409,7 @@ public class Sorting {
 		return mergeSort(array, FunctionObjects.less());
 	}
 	/**
-	 * Sort the given data using a recursive merge sort and the
+	 * <p>Sort the given data using a recursive merge sort and the
 	 * given comparator. 
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -356,7 +422,7 @@ public class Sorting {
 		return array.length + do_SplitMerge(array.clone(), array, 0, array.length-1, cmp);
 	}
 	
-	
+	// do the merge sort split-merge with auxiliary memory.
 	private static <T>
 	long do_SplitMerge(T[] b, T[] a, int start, int end, Comparator<T> cmp) {
 		if (end - start < 1) {
@@ -368,7 +434,7 @@ public class Sorting {
 		ops += do_merge(b, a, start, m, end, cmp);
 		return ops;
 	}
-
+	// actually do the merge with auxiliary memory.
 	private static <T>
 	long do_merge(T[] a, T[] b, int start, int m, int end, Comparator<T> cmp) {
 		int ops = 0;
@@ -387,7 +453,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using iterative merge sort.
+	 * <p>Sort the given data using iterative merge sort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -399,7 +465,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using iterative merge sort and the
+	 * <p>Sort the given data using iterative merge sort and the
 	 * given comparator. 
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
@@ -443,7 +509,7 @@ public class Sorting {
 		return ops;
 	}
 	/**
-	 * Sort the given data using introsort.
+	 * <p>Sort the given data using introsort.
 	 * @param array The array to be sorted.
 	 * @return The number of operations (comparisons and swaps)
 	 * performed.
@@ -455,7 +521,7 @@ public class Sorting {
 	}
 
 	/**
-	 * Sort the given data using heap sort and the given comparator.
+	 * <p>Sort the given data using heap sort and the given comparator.
 	 * @param array The array to be sorted.
 	 * @param cmp The comparator to use.
 	 * @return The number of operations (comparisons and swaps)
@@ -467,7 +533,7 @@ public class Sorting {
 		int depth = (int)(2 * Math.log(array.length)/Math.log(2));
 		return do_introsort(array, 0, array.length-1, depth, cmp);
 	}
-
+	// actually implement the Intro Sort algorithm.
 	private static <T>
 	long do_introsort(T[] array, int s, int e, int depth, Comparator<T> cmp)
 	{
