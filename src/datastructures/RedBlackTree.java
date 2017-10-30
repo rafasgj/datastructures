@@ -32,7 +32,6 @@ class RedBlackNode<T extends Comparable<T>> {
 			throw new DuplicateKeyException("Already inserted: "+value);
 	}
 	
-	
 	private RedBlackNode<T> insertLeft(T value) throws DuplicateKeyException {
 		if (left == null) {
 			left = new RedBlackNode<>(value);
@@ -145,11 +144,143 @@ class RedBlackNode<T extends Comparable<T>> {
 	public void setLeft(RedBlackNode<T> node) {
 		left = node;
 	}
+	//metodo procura valor para deletar dentro dos nós da arvore
+	public void delete(T value, RedBlackNode<T> N) {
+		
+		int cmp = value.compareTo(N.value);
+		
+		if (cmp == 0) {
+			delete_case1(N);//caso encontre entra nos casos de deleção
+		}
+		else if (cmp > 0) {
+			N = this.right;
+			N.delete(value, N);//caso não ache ele segue para o próximo nó se o valor for maior que o do proprio nó
+		}
+		else if(cmp < 0) {
+			N = this.left;
+			N.delete(value, N); //caso não ache ele segue para o próximo nó se o valor for menor que o do proprio nó
+		}
+		
+		
+		
+	}
 	
+	public void delete_case1(RedBlackNode<T> node) {//se o que queremos deletar está na raiz
+		T valueleaf;
+		if(node.parent == null) {// ve se o "pai" é nulo se for é a raiz e busca o sucessor.
+			node = node.right;
+			if(node.left == null) {// caso não tenha filho mais a esquerda
+				valueleaf = node.value;
+				node.parent.value = valueleaf;
+				node.right.parent = node.parent; 
+				node.parent.right = node.right;
+				if(node.right.isRed() == true ) {
+					node.right.setBlack();
+				}
+			}else {// se tiver filho mais a esquerda então
+				node = findSucessor(node);
+				valueleaf = node.value;
+				node.parent.left = null;
+				node = findRoot(node);
+				node.value = valueleaf;
+				if(node.right.isRed() == true && node.right.left == null && node.right.right !=null) {
+					node.right.setBlack();
+					node.right.right.setRed();
+				}else if(node.right.isRed() == true && node.right.left == null && node.right.right ==null) {
+					node.right.setBlack();
+				}
+			}
+		}else{
+			delete_case2(node);
+		}
+	}
+	
+	public void delete_case2(RedBlackNode<T> node) {//deletar folha vermelha ou nó preto com apenas um filho vermelho.
+		if(node.isRed() == true && node.left == null && node.right == null) {
+			if(node.isLeftSon() == true) {
+				node.parent.setLeft(null);	
+			}
+			else if(node.isRightSon() == true) {
+				node.parent.setRight(null);
+			}
+		}
+		else if(node.isRed() == false && node.left != null && node.right == null && node.left.isRed() == true || node.isRed() == false && node.left == null && node.right != null && node.right.isRed() == true) {
+			if(node.isLeftSon() == true) {
+				if(node.left != null && node.right == null && node.left.isRed() == true){// se o nó for filho a esquerda e tiver um filho a esquerda
+					node.left.setBlack();
+					node.left.parent = node.parent; 
+					node.parent.setLeft(node.left);
+				}else if(node.left == null && node.right != null && node.right.isRed() == true){ // se o nó for filho a esquerda e tiver um filho a direita
+					node.right.setBlack();
+					node.right.parent = node.parent;
+					node.parent.setLeft(node.right);
+				}
+			}else if(node.isRightSon() == true) {
+				if(node.left != null && node.right == null && node.left.isRed() == true){// se o nó for filho a esquerda e tiver um filho a esquerda
+					node.left.setBlack();
+					node.left.parent = node.parent; 
+					node.parent.setRight(node.left);
+				}else if(node.left == null && node.right != null && node.right.isRed() == true){ // se o nó for filho a esquerda e tiver um filho a direita
+					node.right.setBlack();
+					node.right.parent = node.parent;
+					node.parent.setRight(node.right);
+				}
+			}
+		}else{
+			delete_case3(node);
+		}
+	}
+	
+	public void delete_case3(RedBlackNode<T> node) {														//&& node.parent.left.right != null && node.parent.left.right != null
+		if(node.isRed() == false && node.right == null && node.left == null && node.parent.right.isRed() == true) {
+																												//&& node.parent.left.right != null || node.isRed() == false && node.right == null && node.left == null && node.parent.right.isRed() == false && node.parent.left.right != null
+		}else if(node.isRed() == false && node.right == null && node.left == null && node.parent.right.isRed() == false ) {
+			System.out.println("TESTEEEEEEE");
+			node = node.parent;
+			node.left = null;
+			node.right.parent = node.parent;
+			node.parent = node.right;
+			node.right = node.parent.left;
+			node.parent.left = node;	// continuar
+		}else {
+			
+			delete_case4(node);
+		}
+	}
+	
+	public void delete_case4(RedBlackNode<T> node) {	
+	}
+	
+	public void delete_case5(RedBlackNode<T> node) {
+		
+	}
+	
+	public void delete_case6(RedBlackNode<T> node) {
+		
+	}
+	
+	public RedBlackNode<T> findRoot(RedBlackNode<T> node) {// metodo que acha a raiz
+
+		if(node.parent != null) {
+			while(node.parent != null) {
+				node = node.parent;			
+			}
+			
+		}
+		return node;
+		
+	}
+	
+	public RedBlackNode<T> findSucessor(RedBlackNode<T> node){//segue até o filho mais a esquerda do lado direito
+		while(node.left != null) {
+			node = node.left;
+		}
+		return node;
+	}
 }
 
-public class RedBlackTree<T extends Comparable<T>>
-{
+public class RedBlackTree<T extends Comparable<T>>{
+	
 	private RedBlackNode<T> root;
 	
 	public void insert(T data) throws DuplicateKeyException
@@ -231,9 +362,15 @@ public class RedBlackTree<T extends Comparable<T>>
 	}
 	
 	public void print() {
+
 		if (root == null)
 			System.out.println("Empty tree.");
 		else
 			root.print();
 	}
-}
+	
+	public void delete_tree(T value){
+		root.delete(value, root);
+		}
+		
+	}
