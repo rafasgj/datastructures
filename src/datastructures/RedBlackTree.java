@@ -439,7 +439,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 
 		// tree.print();
 
-		boolean teste = tree.removeElementTree(25);
+		boolean teste = tree.removeElementTree(7);
 		tree.print();
 	}
 }
