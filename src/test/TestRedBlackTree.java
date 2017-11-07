@@ -25,6 +25,14 @@ public class TestRedBlackTree {
 			arvore.print();
 			System.out.println();
 		}
+		
+		arvore.remove("Rafael");
+		
+		for (int i = 0; i < nomes.length; i++) {
+			arvore.print();
+			System.out.println();
+		}
+				
 	}
 
 }
