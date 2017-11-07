@@ -25,6 +25,7 @@ public class TestRedBlackTree {
 			arvore.print();
 			System.out.println();
 		}
+				
 	}
 
 }
