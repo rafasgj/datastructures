@@ -1,14 +1,3 @@
-/*
- * Data Structures and Algorithms.
- * Copyright (C) 2016 Rafael Guterres Jeffman
- *
- * See the LICENSE file accompanying this source code, for
- * licensing restrictions that might apply.
- *
- */
-
-package datastructures;
-
 class RedBlackNode<T extends Comparable<T>> {
 
 	private T value;
@@ -17,9 +6,22 @@ class RedBlackNode<T extends Comparable<T>> {
 	private RedBlackNode<T> parent;
 	private boolean red;
 	
+	public RedBlackNode<T> getLeft() {
+		return left;
+	}
+
+	public RedBlackNode<T> getRight() {
+		return right;
+	}
+
 	public RedBlackNode(T value) {
 		this.value = value;
 		this.red = true;
+	}
+	
+	public void setParent(RedBlackNode<T> parent)
+	{
+		this.parent = parent;
 	}
 
 	public RedBlackNode<T> insert(T value) throws DuplicateKeyException {
@@ -145,6 +147,10 @@ class RedBlackNode<T extends Comparable<T>> {
 	public void setLeft(RedBlackNode<T> node) {
 		left = node;
 	}
+
+	public T getValue() {
+		return this.value;
+	}
 	
 }
 
@@ -236,4 +242,184 @@ public class RedBlackTree<T extends Comparable<T>>
 		else
 			root.print();
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
+	
+	  public void delete(RedBlackNode<T> z) {
+	        RedBlackNode<T> y = z,x;
+	        boolean yOrigin = y.isRed();
+	        if (z.getLeft() == null) {
+	            x=z.getRight();
+	            transplant(z, z.getRight());
+	        } else if (z.getRight() == null) {
+	            x=z.getLeft();
+	            transplant(z, z.getLeft());
+	        } else {
+	            y = minChild(z.getRight());
+	            yOrigin=y.isRed();
+	            x=y.getRight();
+	            if (y.getParent() == z) {
+	                x.setParent(y);
+	            }else
+	            {
+	                transplant(y, y.getRight());
+	                y.setRight(z.getRight());
+	                y.getRight().setParent(y);
+	            }
+	            transplant(z, y);
+	            y.setLeft(z.getLeft());
+	            y.getLeft().setParent(y);
+	            if(z.isRed())
+	            	y.setRed();
+	            else
+	            	y.setBlack();
+	        }
+	        if(!yOrigin)
+	        {
+	            deleteFixup(x);
+	        }
+	    }
+	 /////////////////////////////////////////////////////////////////////////////////////////////
+	  
+	  void transplant(RedBlackNode<T> u, RedBlackNode<T> v) {
+	        if (u.getParent() == null) {
+	            this.root = v;
+	        } else if (u == u.getParent().getLeft()) {
+	            u.getParent().setLeft(v);
+	        } else {
+	            u.getParent().setRight(v);
+	        }
+	        
+	            v.setParent(u.getParent());
+	    }
+	  /////////////////////////////////////////////////////////////////////////////////////////////
+	
+	  void deleteFixup(RedBlackNode<T> x)
+	    {
+	     
+	        while(x!=root && !x.isRed())
+	        {
+	           RedBlackNode<T> w;
+	           if(x.isLeftSon())
+	           {
+	               w=x.getParent().getRight();
+	               if(w.isRed())
+	               {
+	                   w.setBlack();
+	                   x.getParent().setRed();
+	                   x.getParent().rotateLeft();
+	                   w=x.getParent().getRight();
+	               }
+	               if(!w.getLeft().isRed() && !w.getRight().isRed())
+	               {
+	                   w.setRed();
+	                   x=x.getParent();
+	               }
+	               else {
+	                   if(!w.getRight().isRed())
+	                   {
+	                       w.getLeft().setBlack();
+	                       w.setRed();
+	                       w.rotateRight();
+	                       w=x.getParent().getRight();
+	                   }
+	                   if(x.getParent().isRed())
+	                	   w.setRed();
+	                   else
+	                	   w.setBlack();
+	                   x.getParent().setBlack();
+	                   w.getRight().setBlack();
+	                   x.getParent().rotateLeft();
+	                   x=this.root;
+	                   }
+	               
+	           }
+	           else
+	           {
+	                w=x.getParent().getLeft();
+	               if(w.isRed())
+	               {
+	                   w.setBlack();
+	                   x.getParent().setRed();
+	                   x.getParent().rotateLeft();
+	                   w=x.getParent().getLeft();
+	               }
+	               if(!w.getRight().isRed() && !w.getLeft().isRed())
+	               {
+	                   w.setRed();
+	                   x=x.getParent();
+	               }
+	               else {
+	                   if(!w.getLeft().isRed())
+	                   {
+	                       w.getLeft().setBlack();
+	                       w.setRed();
+	                       w.rotateLeft();
+	                       w=x.getParent().getLeft();
+	                   }
+	                   if(x.getParent().isRed())
+	                	   w.setRed();
+	                   else
+	                	   w.setBlack();
+	                   x.getParent().setBlack();
+	                   w.getLeft().setBlack();
+	                   x.getParent().rotateRight();
+	                   x = this.root;
+	                   }
+	           }
+	        }
+	        x.setBlack();
+	    }
+	  ////////////////////////////////////////////////////////////////////////////////////////
+	  
+	  RedBlackNode<T> minChild(RedBlackNode<T> x) 
+	  {
+	        while (x.getLeft() != null) 
+	        {
+	            x = x.getLeft();
+	        }
+	        return x;
+	  }
+	  ////////////////////////////////////////////////////////////////////////////////////////
+	  
+	  public RedBlackNode<T> buscar(T valor, RedBlackNode<T> node)
+		{
+			if(node != null)
+			{
+				if(node.getValue().equals(valor) )
+				{
+					return node;
+				}
+				else if(valor.compareTo(node.getValue()) == 1)
+				{
+					if(valor.compareTo(node.getRight().getValue()) == 0)
+						return node.getRight();
+					else
+						return buscar(valor, node.getRight());
+				}
+				else
+				{
+					if(node.getLeft().getValue() == node.getValue())
+						return node.getLeft();
+					else
+						return buscar(valor, node.getLeft());
+				}
+			}
+			return null;
+		}
+		
+		public RedBlackNode<T> buscar(T valor)
+		{
+			if(valor.compareTo(this.root.getValue()) == 0)
+			{
+				return this.root;
+			}
+			else
+			{
+				RedBlackNode<T> noRetorno = buscar(valor, this.root);
+				return noRetorno;
+			}
+		}
+	  
 }
