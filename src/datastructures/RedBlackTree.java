@@ -1,19 +1,19 @@
 
-class RBN<T extends Comparable<T>> {
+class RedBlackNode<T extends Comparable<T>> {
 
     T value;
-    RBN<T> left;
-    RBN<T> right;
-    RBN<T> parent;
+    RedBlackNode<T> left;
+    RedBlackNode<T> right;
+    RedBlackNode<T> parent;
     boolean red;
     
-    public RBN(T value) {
+    public RedBlackNode(T value) {
         this.value = value;
         this.red = true;
     }
 
-    public RBN<T> getSibling(RBN<T> node) {
-        RBN<T> sibling = null;
+    public RedBlackNode<T> getSibling(RedBlackNode<T> node) {
+        RedBlackNode<T> sibling = null;
         
         if (node.getParent().left == node) {
             sibling = node.getParent().right;
@@ -23,7 +23,7 @@ class RBN<T extends Comparable<T>> {
         return sibling;
     }
     
-    public RBN<T> insert(T value) throws DuplicateKeyException {
+    public RedBlackNode<T> insert(T value) throws DuplicateKeyException {
         int cmp = value.compareTo(this.value);
         if (cmp < 0)
             return insertLeft(value);
@@ -33,25 +33,25 @@ class RBN<T extends Comparable<T>> {
             throw new DuplicateKeyException("Already inserted: "+value);
     }
         
-    private RBN<T> insertLeft(T value) throws DuplicateKeyException {
+    private RedBlackNode<T> insertLeft(T value) throws DuplicateKeyException {
         if (left == null) {
-            left = new RBN<>(value);
+            left = new RedBlackNode<>(value);
             left.parent = this;
             return left;
         } else
             return left.insert(value);
     }
 
-    private RBN<T> insertRight(T value) throws DuplicateKeyException {
+    private RedBlackNode<T> insertRight(T value) throws DuplicateKeyException {
         if (right == null) {
-            right = new RBN<>(value);
+            right = new RedBlackNode<>(value);
             right.parent = this;
             return right;
         } else
             return right.insert(value);
     }
     
-        public RBN<T> delete(T value){
+        public RedBlackNode<T> delete(T value){
             int cmp = value.compareTo(this.value);
             System.out.println("Cmp "+cmp);
             if (cmp > 0) {
@@ -66,15 +66,15 @@ class RBN<T extends Comparable<T>> {
             }
         }
         
-        public RBN<T> deleteLeft(T data){
+        public RedBlackNode<T> deleteLeft(T data){
             return this.left.delete(data);
         }
         
-        public RBN<T> deleteRight(T data){
+        public RedBlackNode<T> deleteRight(T data){
             return this.right.delete(data);
         }
         
-    public RBN<T> getParent() {
+    public RedBlackNode<T> getParent() {
         return parent;
     }
     
@@ -104,10 +104,10 @@ class RBN<T extends Comparable<T>> {
         System.out.print(")");
     }
 
-    public RBN<T> getUncle() {
+    public RedBlackNode<T> getUncle() {
         if (parent == null)
             return null;
-        RBN<T> G = parent.parent;
+        RedBlackNode<T> G = parent.parent;
         if (G == null)
             return null;
         if (G.left == parent)
@@ -129,12 +129,12 @@ class RBN<T extends Comparable<T>> {
 
     public void rotateLeft() {
         if (right == null) return;
-        RBN<T> N = this;
-        RBN<T> P = this.parent;
-        RBN<T> R = this.right;
-        RBN<T> S = R.left;
+        RedBlackNode<T> N = this;
+        RedBlackNode<T> P = this.parent;
+        RedBlackNode<T> R = this.right;
+        RedBlackNode<T> S = R.left;
         //
-        RBN<T> B = S;
+        RedBlackNode<T> B = S;
         R.left = N;
         N.right = B;
         // parents
@@ -146,12 +146,12 @@ class RBN<T extends Comparable<T>> {
 
     public void rotateRight() {
         if (left == null) return;
-        RBN<T> N = this;
-        RBN<T> P = this.parent;
-        RBN<T> L = this.left;
-        RBN<T> S = L.right;
+        RedBlackNode<T> N = this;
+        RedBlackNode<T> P = this.parent;
+        RedBlackNode<T> L = this.left;
+        RedBlackNode<T> S = L.right;
         //
-        RBN<T> B = S;
+        RedBlackNode<T> B = S;
         L.right = N;
         N.left = B;
         // parents
@@ -161,30 +161,30 @@ class RBN<T extends Comparable<T>> {
             B.parent = N;
     }
 
-    public void setRight(RBN<T> node) {
+    public void setRight(RedBlackNode<T> node) {
         right = node;
     }
 
-    public void setLeft(RBN<T> node) {
+    public void setLeft(RedBlackNode<T> node) {
         left = node;
     }
     
 }
 
-public class RBT<T extends Comparable<T>>
+public class RedBlackTree<T extends Comparable<T>>
 {
-    private RBN<T> root;
+    private RedBlackNode<T> root;
     
     public void insert(T data) throws DuplicateKeyException {
-            RBN<T> node;
+            RedBlackNode<T> node;
             if (root == null)
-        node = root = new RBN<>(data);
+        node = root = new RedBlackNode<>(data);
             else
         node = root.insert(data);
             insert_case1(node);
     }
 
-    private void insert_case1(RBN<T> node) {
+    private void insert_case1(RedBlackNode<T> node) {
         if (node.getParent() == null) {
             node.setBlack();
             return;
@@ -192,16 +192,16 @@ public class RBT<T extends Comparable<T>>
         insert_case2(node);
     }
 
-    private void insert_case2(RBN<T> node) {
-        RBN<T> P = node.getParent();
+    private void insert_case2(RedBlackNode<T> node) {
+        RedBlackNode<T> P = node.getParent();
         if (!P.isRed()) return;
         insert_case3(node);
     }
 
-    private void insert_case3(RBN<T> node) {
-        RBN<T> P = node.getParent();
-        RBN<T> U = node.getUncle();
-        RBN<T> G = P.getParent();
+    private void insert_case3(RedBlackNode<T> node) {
+        RedBlackNode<T> P = node.getParent();
+        RedBlackNode<T> U = node.getUncle();
+        RedBlackNode<T> G = P.getParent();
         if (P.isRed() && (U != null && U.isRed())) {
             P.setBlack();
             U.setBlack();
@@ -211,10 +211,10 @@ public class RBT<T extends Comparable<T>>
             insert_case4(node);
     }
 
-    private void insert_case4(RBN<T> node) { // P is R, U is B 
-        RBN<T> P = node.getParent();
-        RBN<T> G = P.getParent();
-        RBN<T> N = node;
+    private void insert_case4(RedBlackNode<T> node) { // P is R, U is B 
+        RedBlackNode<T> P = node.getParent();
+        RedBlackNode<T> G = P.getParent();
+        RedBlackNode<T> N = node;
 
         if (P.isRightSon() && !node.isRightSon()) {
             P.rotateRight();
@@ -230,13 +230,13 @@ public class RBT<T extends Comparable<T>>
         insert_case5(N);
     }
 
-    private void insert_case5(RBN<T> node) { // P is R, U is B 
-        RBN<T> P = (RBN<T>)(node.getParent());
-        RBN<T> G = (RBN<T>)P.getParent();
-        RBN<T> GG = null;
+    private void insert_case5(RedBlackNode<T> node) { // P is R, U is B 
+        RedBlackNode<T> P = (RedBlackNode<T>)(node.getParent());
+        RedBlackNode<T> G = (RedBlackNode<T>)P.getParent();
+        RedBlackNode<T> GG = null;
         boolean gl = G.isLeftSon(); 
         if (G.getParent() != null)
-            GG = (RBN<T>)(G.getParent());
+            GG = (RedBlackNode<T>)(G.getParent());
         
         P.setBlack();
         G.setRed();
@@ -253,21 +253,21 @@ public class RBT<T extends Comparable<T>>
     }
         
         public void delete(T data) throws DuplicateKeyException {
-            RBN<T> node;
+            RedBlackNode<T> node;
             node = root.delete(data);
             delete_case1(node);
         }
         
-        private void delete_case1(RBN<T> node){
+        private void delete_case1(RedBlackNode<T> node){
             if (node.getParent() != null ) {
                 delete_case2(node);
             }
         }
         
-        private void delete_case2(RBN<T> node){
+        private void delete_case2(RedBlackNode<T> node){
 
-            RBN<T> parent = node.getParent();
-            RBN<T> sibling = node.getSibling(node);
+            RedBlackNode<T> parent = node.getParent();
+            RedBlackNode<T> sibling = node.getSibling(node);
             
             if (sibling.red == true) {
                 parent.red = true;
@@ -282,9 +282,9 @@ public class RBT<T extends Comparable<T>>
             }
         }
         
-        public void delete_case3(RBN<T> node) {
-            RBN<T> parent = node.getParent();
-            RBN<T> sibling = node.getSibling(node);
+        public void delete_case3(RedBlackNode<T> node) {
+            RedBlackNode<T> parent = node.getParent();
+            RedBlackNode<T> sibling = node.getSibling(node);
             
             if ((parent.red == false) && (sibling.red == false) && (sibling.left.red == false) && (sibling.right.red == false)) {
                 sibling.red = true;
@@ -295,9 +295,9 @@ public class RBT<T extends Comparable<T>>
             
         }
 
-        public void delete_case4(RBN<T> node) {
-            RBN<T> parent = node.getParent();
-            RBN<T> sibling = node.getSibling(node);
+        public void delete_case4(RedBlackNode<T> node) {
+            RedBlackNode<T> parent = node.getParent();
+            RedBlackNode<T> sibling = node.getSibling(node);
             
             if ((parent.red == true) && (sibling.red == false) && (sibling.left.red == false) && (sibling.right.red == false)) {
                 sibling.red = true;
@@ -308,9 +308,9 @@ public class RBT<T extends Comparable<T>>
             
         }
 
-        public void delete_case5(RBN<T> node) {
-            RBN<T> parent = node.getParent();
-            RBN<T> sibling = node.getSibling(node);
+        public void delete_case5(RedBlackNode<T> node) {
+            RedBlackNode<T> parent = node.getParent();
+            RedBlackNode<T> sibling = node.getSibling(node);
             
             if (sibling.red == false) {
                 if ((node == parent.left) && (sibling.right.red == false) && (sibling.left.red == true)) {
@@ -326,9 +326,9 @@ public class RBT<T extends Comparable<T>>
             delete_case6(node);
         }
         
-        public void delete_case6(RBN<T> node) {
-            RBN<T> parent = node.getParent();
-            RBN<T> sibling = node.getSibling(node);
+        public void delete_case6(RedBlackNode<T> node) {
+            RedBlackNode<T> parent = node.getParent();
+            RedBlackNode<T> sibling = node.getSibling(node);
             
             sibling.red = parent.red;
             parent.red = false;
@@ -343,8 +343,8 @@ public class RBT<T extends Comparable<T>>
             removeOneChild(node);
         }
         
-        private void removeOneChild(RBN<T> node) {
-        RBN<T> child = node.right.red ? node.left : node.right;
+        private void removeOneChild(RedBlackNode<T> node) {
+        RedBlackNode<T> child = node.right.red ? node.left : node.right;
             
             replace_node(node, child);
             
@@ -357,14 +357,14 @@ public class RBT<T extends Comparable<T>>
             }
          free(node);
     }
-    public void free(RBN<T> node) {
+    public void free(RedBlackNode<T> node) {
         node.left = null;
         node.right = null;
         node.parent = null;
         node.value = null;
     }
 
-public void replace_node(RBN<T> node, RBN<T> child) {
+public void replace_node(RedBlackNode<T> node, RedBlackNode<T> child) {
         
         
     }
