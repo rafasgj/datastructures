@@ -31,8 +31,7 @@ class RedBlackNode<T extends Comparable<T>> {
 		else
 			throw new DuplicateKeyException("Already inserted: "+value);
 	}
-	
-	
+		
 	private RedBlackNode<T> insertLeft(T value) throws DuplicateKeyException {
 		if (left == null) {
 			left = new RedBlackNode<>(value);
@@ -51,6 +50,28 @@ class RedBlackNode<T extends Comparable<T>> {
 			return right.insert(value);
 	}
 	
+        public RedBlackNode<T> delete(T value){
+            int cmp = value.compareTo(this.value);
+            if (cmp > 0) {
+                return deleteRight(value);
+            } else {
+                if (cmp < 0) {
+                    return deleteLeft(value);
+                } else {
+                    System.out.println("Achou!");
+                    return this;
+                }
+            }
+        }
+        
+        public RedBlackNode<T> deleteLeft(T data){
+            return this.left.delete(data);
+        }
+        
+        public RedBlackNode<T> deleteRight(T data){
+            return this.right.delete(data);
+        }
+        
 	public RedBlackNode<T> getParent() {
 		return parent;
 	}
@@ -91,6 +112,17 @@ class RedBlackNode<T extends Comparable<T>> {
 			return G.right;
 		return G.left;
 	}
+        
+        public RedBlackNode<T> getSibling() {
+            if (parent == null) { return null;}
+            
+            RedBlackNode<T> S = parent;
+            
+            if (S == null) { return null; }
+            if (S.left == parent) { return S.right; }
+            
+            return S.left;
+        }
 
 	public boolean isRightSon() {
 		if (parent == null)
@@ -141,6 +173,14 @@ class RedBlackNode<T extends Comparable<T>> {
 	public void setRight(RedBlackNode<T> node) {
 		right = node;
 	}
+        
+        public RedBlackNode<T> getRight(){
+            return this.right;
+        }
+        
+        public RedBlackNode<T> getLeft(){
+            return this.left;
+        }
 
 	public void setLeft(RedBlackNode<T> node) {
 		left = node;
@@ -152,16 +192,15 @@ public class RedBlackTree<T extends Comparable<T>>
 {
 	private RedBlackNode<T> root;
 	
-	public void insert(T data) throws DuplicateKeyException
-	{
-		RedBlackNode<T> node;
-		if (root == null)
-			node = root = new RedBlackNode<>(data);
-		else
-			node = root.insert(data);
-		insert_case1(node);
+	public void insert(T data) throws DuplicateKeyException {
+            RedBlackNode<T> node;
+            if (root == null)
+		node = root = new RedBlackNode<>(data);
+            else
+		node = root.insert(data);
+            insert_case1(node);
 	}
-	
+
 	private void insert_case1(RedBlackNode<T> node) {
 		if (node.getParent() == null) {
 			node.setBlack();
@@ -169,13 +208,13 @@ public class RedBlackTree<T extends Comparable<T>>
 		}
 		insert_case2(node);
 	}
-	
+
 	private void insert_case2(RedBlackNode<T> node) {
 		RedBlackNode<T> P = node.getParent();
 		if (!P.isRed()) return;
 		insert_case3(node);
 	}
-	
+
 	private void insert_case3(RedBlackNode<T> node) {
 		RedBlackNode<T> P = node.getParent();
 		RedBlackNode<T> U = node.getUncle();
@@ -188,7 +227,7 @@ public class RedBlackTree<T extends Comparable<T>>
 		} else
 			insert_case4(node);
 	}
-	
+
 	private void insert_case4(RedBlackNode<T> node) { // P is R, U is B 
 		RedBlackNode<T> P = node.getParent();
 		RedBlackNode<T> G = P.getParent();
@@ -207,7 +246,7 @@ public class RedBlackTree<T extends Comparable<T>>
 			
 		insert_case5(N);
 	}
-	
+
 	private void insert_case5(RedBlackNode<T> node) { // P is R, U is B 
 		RedBlackNode<T> P = (RedBlackNode<T>)(node.getParent());
 		RedBlackNode<T> G = (RedBlackNode<T>)P.getParent();
@@ -229,8 +268,102 @@ public class RedBlackTree<T extends Comparable<T>>
 		else
 			root = P;
 	}
-	
-	public void print() {
+        
+        public void delete(T data) throws DuplicateKeyException {
+            RedBlackNode<T> node;
+            node = root.delete(data);
+            delete_case1(node);
+        }
+        
+        private void delete_case1(RedBlackNode<T> node){
+            RedBlackNode<T> parent = node.getParent();
+            if (parent != null) {
+                delete_case2(node);
+            }
+            node = null;
+        }
+        
+        private void delete_case2(RedBlackNode<T> node){
+            RedBlackNode<T> S = node.getSibling();
+            RedBlackNode<T> P = node.getParent();
+            
+            if (S.isRed()) {
+                P.setRed();
+                S.setBlack();
+                
+                if (P.isLeftSon()) {
+                    P.rotateLeft();
+                } else {
+                    P.rotateRight();
+                }
+            }
+            delete_case3(node);
+        }
+        
+        private void delete_case3(RedBlackNode<T> node){
+            RedBlackNode<T> S = node.getSibling();
+            RedBlackNode<T> P = node.getParent();
+            
+            if (!P.isRed() && !S.isRed() && !S.getLeft().isRed() && !S.getRight().isRed()) {
+                S.setRed();
+                delete_case1(P);
+            } else {
+                delete_case4(node);
+            }
+        }
+        
+        private void delete_case4(RedBlackNode<T> node){
+            RedBlackNode<T> S = node.getSibling();
+            RedBlackNode<T> P = node.getParent();
+            
+            if (P.isRed() && !S.isRed() && !S.getLeft().isRed() && !S.getRight().isRed()) {
+                S.setRed();
+                P.setBlack();
+            } else {
+                delete_case5(node);
+            }
+        }
+        
+        private void delete_case5(RedBlackNode<T> node) {
+            RedBlackNode<T> S = node.getSibling();
+            RedBlackNode<T> P = node.getParent();
+            
+            if (!S.isRed()) {
+                if (node == P.getLeft() && !S.getRight().isRed() && S.getLeft().isRed()) {
+                    S.setRed();
+                    S.getLeft().setBlack();
+                    S.rotateRight();
+                } else if (node == P.getRight() && !S.getLeft().isRed() && S.getRight().isRed()) {
+                    S.setRed();
+                    S.getRight().setBlack();
+                    S.rotateLeft();
+                }
+            }
+            delete_case6(node);
+        }
+        
+        private void delete_case6(RedBlackNode<T> node){
+            RedBlackNode<T> S = node.getSibling();
+            RedBlackNode<T> P = node.getParent();
+            
+            if (P.isRed()) {
+                S.setRed();
+            } else {
+                S.setBlack();
+            }
+            
+            P.setBlack();
+            
+            if (node == P.getLeft()) {
+                S.getLeft().getRight().setBlack();
+                S.getParent().rotateLeft();
+            } else {
+                S.getLeft().setBlack();
+                P.rotateRight();
+            }
+        }
+        
+        public void print() {
 		if (root == null)
 			System.out.println("Empty tree.");
 		else
